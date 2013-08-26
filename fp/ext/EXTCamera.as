@@ -163,7 +163,8 @@ package fp.ext
 		// Update the camera's world offsets
 		public function update():void
 		{
-			this.updateLerping();
+			if (_lerping)
+				this.updateLerping();
 			
 			vx += ax;
 			vy += ay;
@@ -213,10 +214,13 @@ package fp.ext
 				
 				if (distance <= _lerpTotalDistance / 2.0)
 				{
-					this.vx -= xProportion * _LERP_SPEED_;
-					this.vy -= yProportion * _LERP_SPEED_;
+					if (vMagnitude > _LERP_SPEED_)
+					{
+						this.vx -= xProportion * _LERP_SPEED_;
+						this.vy -= yProportion * _LERP_SPEED_;
+					}
 				}
-				else if (vMagnitude > _LERP_SPEED_);
+				else
 				{
 					this.vx += xProportion * _LERP_SPEED_;
 					this.vy += yProportion * _LERP_SPEED_;
