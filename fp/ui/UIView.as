@@ -98,7 +98,7 @@ package fp.ui
 			var myAbsoluteUpperLeft:Point = EXTUtility.AbsolutePositionOfPointInContainer(parentAbsolutePosition, parentSize, myRelativeUpperLeft, this.offsetAlignmentInParent);
 			
 			// Logic to render content of this view occurs now
-			this.renderContent(myAbsoluteUpperLeft, mySize);
+			this.renderContent(myAbsoluteUpperLeft, mySize, scale);
 			
 			// Now we draw our subviews
 			for each (var view:UIView in _subviews)
@@ -114,11 +114,11 @@ package fp.ui
 		
 		/**
 		 * Logic to render any content specific to a given UIView subclass. Even still,
-		 *    should usually only be overridden by UILabelView and UIImageView.
+		 *    should usually only be overridden by UIImageView and UILabelView.
 		 * @param	absoluteUpperLeft	Screen coordinate to place content at.
 		 * @param	absoluteSize		Bounds to render content within.
 		 */
-		protected function renderContent(absoluteUpperLeft:Point, absoluteSize:Point):void
+		protected function renderContent(absoluteUpperLeft:Point, absoluteSize:Point, scale:Number):void
 		{
 			// Overridden in UIImageView and UILabelView
 		}

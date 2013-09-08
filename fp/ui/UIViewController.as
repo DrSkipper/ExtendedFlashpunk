@@ -4,6 +4,7 @@ package fp.ui
 	import fp.ext.EXTUtility;
 	import fp.ext.EXTCamera;
 	import fp.ui.UIView;
+	import fp.ext.EXTConsole;
 	
 	/**
 	 * UIViewController

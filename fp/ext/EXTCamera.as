@@ -16,24 +16,19 @@ package fp.ext
 	{
 		// Public Variables
 		// x and y represent pixel coordinates in the world when zoom is at 1.0
-		public var x:Number;    // Position (upper-left)
-		public var y:Number;
-		public var vx:Number;   // Velocity
-		public var vy:Number;
-		public var ax:Number;   // Acceleration
-		public var ay:Number;
-		public var zoom:Number; // Zoom
-		public var zoomVelocity:Number;
-		public var zoomAcceleration:Number;
+		public var x:Number = 0;      // Position (upper-left)
+		public var y:Number = 0;
+		public var vx:Number = 0;     // Velocity
+		public var vy:Number = 0;
+		public var ax:Number = 0;  	  // Acceleration
+		public var ay:Number = 0;
+		public var zoom:Number = 1.0; // Zoom
+		public var zoomVelocity:Number = 0;
+		public var zoomAcceleration:Number = 0;
 		
 		// Constructor
 		public function EXTCamera()
 		{
-			x = y = 0.0;
-			vx = vy = 0.0;
-			ax = ay = 0.0;
-			zoom = 1.0;
-			
 			_lastFrameX = _lastFrameY = 0.0;
 			_lerping = false;
 			_lerpStartPosition = new Point();
@@ -171,8 +166,8 @@ package fp.ext
 			x += vx;
 			y += vy;
 			
-			zoomVelocity *= zoomAcceleration;
-			zoom *= zoomVelocity;
+			zoomVelocity += zoomAcceleration;
+			zoom += zoomVelocity;
 		}
 		
 		// Apply the camera's world offsets to the world
