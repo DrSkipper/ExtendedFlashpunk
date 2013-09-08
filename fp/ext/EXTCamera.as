@@ -79,14 +79,14 @@ package fp.ext
 		}
 		
 		// Current position is offset by given values
-		public function moveDistance(dx, dy):void
+		public function moveDistance(dx:Number, dy:Number):void
 		{
 			x += dx;
 			y += dy;
 		}
 		
 		// Current velocity is offset by given values
-		public function alterVelocity(dvx, dvy):void
+		public function alterVelocity(dvx:Number, dvy:Number):void
 		{
 			vx += dvx;
 			vy += dvy;

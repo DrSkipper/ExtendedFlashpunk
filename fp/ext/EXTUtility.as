@@ -3,10 +3,12 @@ package fp.ext
 	import flash.geom.Point;
 	import flash.utils.describeType;
 	
-	// Utility Class with various convenience functions
+	// Utility Class with various convenience functions, mostly relating to offsets.
 	// Created by Fletcher, 8/25/13
 	public class EXTUtility
 	{
+		static public const ZERO_POINT:Point = new Point(0, 0); 
+		
 		// Helper function for assisting automation of fake AS3 Enums
 		// Credit: http://scottbilas.com/blog/faking-enums-in-as3/
 		public static function InitEnumConstants(inType :*) :void
@@ -44,7 +46,7 @@ package fp.ext
 		//  DistanceBetweenTwoContainers() should be the more commonly needed method.
 		public static function UpperLeftifyCoordinate(p:Point, containerSize:Point, offsetType:EXTOffsetType):Point
 		{
-			var pNormalized:Point = p;
+			var pNormalized:Point = new Point(p.x, p.y);
 			
 			if (offsetType == EXTOffsetType.CENTER)
 			{
@@ -89,6 +91,73 @@ package fp.ext
 			// TOP_LEFT case covered by default value
 			
 			return pNormalized;
+		}
+		
+		// Given the absolute point (i.e. on the screen) of a container, and a point with 
+		//   relative coordinates within that container, find the absolute position of the
+		//   point within the container.
+		public static function AbsolutePositionOfPointInContainer(absoluteUpperLeftPositionOfContainer:Point, 
+																  containerSize:Point, 
+																  pointOffsetInContainer:Point, 
+																  offsetType:EXTOffsetType)
+																  :Point
+		{
+			var absolutePoint:Point = new Point(absoluteUpperLeftPositionOfContainer.x, absoluteUpperLeftPositionOfContainer.y);
+			var returnValue:Point = new Point(pointOffsetInContainer.x, pointOffsetInContainer.y);
+			
+			if (offsetType == EXTOffsetType.TOP_LEFT)
+			{
+				// no x change
+				// no y change
+			}
+			else if (offsetType == EXTOffsetType.CENTER)
+			{
+				absolutePoint.x += containerSize.x / 2;
+				absolutePoint.y += containerSize.y / 2;
+			}
+			else if (offsetType == EXTOffsetType.TOP_CENTER)
+			{
+				absolutePoint.x += containerSize.x / 2;
+				// no y change
+			}
+			else if (offsetType == EXTOffsetType.BOTTOM_CENTER)
+			{
+				absolutePoint.x += containerSize.x / 2;
+				absolutePoint.y += containerSize.y;
+			}
+			else if (offsetType == EXTOffsetType.LEFT_CENTER)
+			{
+				// no x change
+				absolutePoint.y += containerSize.y / 2;
+			}
+			else if (offsetType == EXTOffsetType.RIGHT_CENTER)
+			{
+				absolutePoint.x += containerSize.x;
+				absolutePoint.y += containerSize.y / 2;
+			}
+			else if (offsetType == EXTOffsetType.BOTTOM_RIGHT)
+			{
+				absolutePoint.x += containerSize.x;
+				absolutePoint.y += containerSize.y;
+			}
+			else if (offsetType == EXTOffsetType.TOP_RIGHT)
+			{
+				absolutePoint.x += containerSize.x;
+				// no y change
+			}
+			else if (offsetType == EXTOffsetType.BOTTOM_LEFT)
+			{
+				// no x change
+				absolutePoint.y += containerSize.y;
+			}
+			else
+			{
+				//TODO - fcole - warning
+			}
+			
+			returnValue.x += absolutePoint.x;
+			returnValue.y += absolutePoint.y;
+			return returnValue;
 		}
 	}
 }

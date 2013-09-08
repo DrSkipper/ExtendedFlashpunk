@@ -1,37 +1,42 @@
 package fp.ui
 {
 	import flash.geom.Point;
+	import fp.ext.EXTOffsetType;
+	import fp.ext.EXTUtility;
 	
-	// UIView
-	// Super class for all UI elements. UI should generally be structured as a tree
-	//    of UIViews (and it's subclasses), with the subviews to be located within
-	//    the parent views, and adopt the parents' transformations.
-	// Created by Fletcher, 4/25/13
+	/**
+	 * UIView
+	 * Super class for all UI elements. UI should generally be structured as a tree
+	 *    of UIViews (and it's subclasses), with the subviews to be located within
+	 *    the parent views, and adopting the parents' transformations.
+	 * Created by Fletcher, 4/25/13
+	 */
 	public class UIView
 	{
 		// Standard positioning fields
-		public var x:Number = 0;
-		public var y:Number = 0;
-		public var width:Number = 0;
-		public var height:Number = 0;
+		public var position:Point;
+		public var size:Point;
 		
-		// For specialized placement/pivoting
-		// Generally (and by default) set to center of view
-		public var pivotToParent:Point = null;
-		public var pivotForChildren:Point = null;
+		// Offsets to measure positions from.
+		// Defaults to centering this view in the center of it's parent's view.
+		public var offsetAlignmentInParent:EXTOffsetType = EXTOffsetType.CENTER;
+		public var offsetAlignmentForSelf:EXTOffsetType = EXTOffsetType.CENTER;
 		
-		// Array of subviews
-		// Public access through addSubview() and removeSubview()
-		protected var _subviews:Vector.<UIView> = null;
-		
-		public function UIView(x:Number, y:Number, width, height) 
+		/**
+		 * Constructor. Set up initial transforms.
+		 * @param	position	The initial position of the View, relative to its parent
+		 * @param	size		The initial size of the View
+		 */
+		public function UIView(position:Point, size:Point) 
 		{
-			this.x = x;
-			this.y = y;
-			this.width = width;
-			this.height = height;
+			this.position = new Point(position.x, position.y);
+			this.size = new Point(size.x, size.y);
 		}
 		
+		/**
+		 * Add a subview, which inherits the transforms of this view, as a subview.
+		 * @param	subview	The View to add as a subview
+		 */
 		public function addSubview(subview:UIView):void
 		{
 			if (_subviews == null)
@@ -40,20 +45,82 @@ package fp.ui
 			_subviews.push(subview);
 		}
 		
-		public function removeSubview(subview:UIView):void
+		/**
+		 * Remove a View from this View's list of subviews.
+		 * @param	subview	The View to remove from this View's subviews.
+		 * @return			The View which was removed, or null if it wasn't found.
+		 */
+		public function removeSubview(subview:UIView):UIView
 		{
+			var removedView:UIView = null;
+			
 			if (_subviews != null)
-				_subviews.splice(_subviews.indexOf(subview), 1);
+			{
+				var removed:Vector.<UIView>  = _subviews.splice(_subviews.indexOf(subview), 1);
+				if (removed != null && removed.length > 0)
+					removedView = removed.pop();
+			}
+			
+			return removedView;
 		}
 		
+		/**
+		 * Update the View. Override this function in order to perform 
+		 *    view-specific computations, but remember to call super.update()
+		 *    or the subviews will not be updated.
+		 */
 		public function update():void
 		{
-			//TODO - fcole - Update each child
+			for each (var view:UIView in _subviews)
+				view.update();
 		}
 		
-		public function render():void
+		/**
+		 * Render the View. This function should NOT need to be overridden in normal cases.
+		 * @param	parentAbsolutePosition	The true upper left screen coordinate of the parent view.
+		 * @param	parentSize				The true drawing size of the parent.
+		 * @param	scale					How much to scale the view by - Used to account for zoom in camera-relative UI.
+		 */
+		public function render(parentAbsolutePosition:Point, parentSize:Point, scale:Number):void
 		{
-			//TODO - fcole - Render each child, in order
+			var myOffset:Point = new Point(this.position.x, this.position.y);
+			var mySize:Point = new Point(this.size.x, this.size.y);
+			
+			if (scale != 1.0)
+			{
+				myOffset.x *= scale;
+				myOffset.y *= scale;
+				mySize.x *= scale;
+				mySize.y *= scale;
+			}
+			
+			var myRelativeUpperLeft:Point = EXTUtility.UpperLeftifyCoordinate(myOffset, mySize, this.offsetAlignmentForSelf);
+			var myAbsoluteUpperLeft:Point = EXTUtility.AbsolutePositionOfPointInContainer(parentAbsolutePosition, parentSize, myRelativeUpperLeft, this.offsetAlignmentInParent);
+			
+			// Logic to render content of this view occurs now
+			this.renderContent(myAbsoluteUpperLeft, mySize);
+			
+			// Now we draw our subviews
+			for each (var view:UIView in _subviews)
+				view.render(myAbsoluteUpperLeft, mySize, scale);
+		}
+		
+		
+		// Protected
+		
+		// Array of subviews
+		// Public access through addSubview() and removeSubview()
+		protected var _subviews:Vector.<UIView> = null;
+		
+		/**
+		 * Logic to render any content specific to a given UIView subclass. Even still,
+		 *    should usually only be overridden by UILabelView and UIImageView.
+		 * @param	absoluteUpperLeft	Screen coordinate to place content at.
+		 * @param	absoluteSize		Bounds to render content within.
+		 */
+		protected function renderContent(absoluteUpperLeft:Point, absoluteSize:Point):void
+		{
+			// Overridden in UIImageView and UILabelView
 		}
 	}
 }
