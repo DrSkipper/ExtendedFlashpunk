@@ -29,9 +29,9 @@ package fp.ext
 		{
 			var newColor:uint = 0x000000;
 			newColor += r * 255;
-			newColor << 8;
+			newColor = newColor << 8;
 			newColor += g * 255;
-			newColor << 8;
+			newColor = newColor << 8;
 			newColor += b * 255;
 			webColor = newColor;
 			alpha = a;
