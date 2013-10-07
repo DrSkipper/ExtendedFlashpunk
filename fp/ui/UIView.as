@@ -1,8 +1,12 @@
 package fp.ui
 {
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
+	import net.flashpunk.graphics.Canvas;
+	import net.flashpunk.FP;
 	import fp.ext.EXTOffsetType;
 	import fp.ext.EXTUtility;
+	import fp.ext.EXTColor
 	
 	/**
 	 * UIView
@@ -21,6 +25,15 @@ package fp.ui
 		// Defaults to centering this view in the center of it's parent's view.
 		public var offsetAlignmentInParent:EXTOffsetType = EXTOffsetType.CENTER;
 		public var offsetAlignmentForSelf:EXTOffsetType = EXTOffsetType.CENTER;
+		
+		// Set the background of the View to a constant color.
+		// Useful for debugging, or for drawing colored quads in UI.
+		public function get backgroundColor():EXTColor
+		{ 
+			if (_backgroundColor == null)
+				_backgroundColor = new EXTColor();
+			return _backgroundColor;
+		}
 		
 		/**
 		 * Constructor. Set up initial transforms.
@@ -112,14 +125,34 @@ package fp.ui
 		// Public access through addSubview() and removeSubview()
 		protected var _subviews:Vector.<UIView> = null;
 		
+		// Handling of background color
+		protected var _backgroundColor:EXTColor = null;
+		protected var _backgroundColorCanvas:Canvas = null;
+		protected var _backgroundColorRectangle:Rectangle = null;
+		
 		/**
 		 * Logic to render any content specific to a given UIView subclass. Even still,
 		 *    should usually only be overridden by UIImageView and UILabelView.
 		 * @param	absoluteUpperLeft	Screen coordinate to place content at.
 		 * @param	absoluteSize		Bounds to render content within.
+		 * @param	scale				Zoom level, for scaling images to match.
 		 */
 		protected function renderContent(absoluteUpperLeft:Point, absoluteSize:Point, scale:Number):void
 		{
+			if (_backgroundColor != null)
+			{
+				if (_backgroundColorCanvas == null)
+				{
+					_backgroundColorCanvas = new Canvas(FP.screen.width, FP.screen.height);
+					_backgroundColorRectangle = new Rectangle();
+				}
+				
+				_backgroundColorRectangle.width = absoluteSize.x;
+				_backgroundColorRectangle.height = absoluteSize.y;;
+				_backgroundColorCanvas.fill(_backgroundColorRectangle, _backgroundColor.webColor, _backgroundColor.alpha);
+				_backgroundColorCanvas.render(FP.buffer, absoluteUpperLeft, EXTUtility.ZERO_POINT);
+			}
+			
 			// Overridden in UIImageView and UILabelView
 		}
 	}

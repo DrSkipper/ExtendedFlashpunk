@@ -7,7 +7,7 @@ package fp.ext
 	// Created by Fletcher, 8/25/13
 	public class EXTUtility
 	{
-		static public const ZERO_POINT:Point = new Point(0, 0); 
+		static public const ZERO_POINT:Point = new Point(0, 0);
 		
 		// Helper function for assisting automation of fake AS3 Enums
 		// Credit: http://scottbilas.com/blog/faking-enums-in-as3/

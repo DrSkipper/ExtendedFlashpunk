@@ -27,6 +27,8 @@ package fp.ui
 		
 		override protected function renderContent(absoluteUpperLeft:Point, absoluteSize:Point, scale:Number):void
 		{
+			super.renderContent(absoluteUpperLeft, absoluteSize, scale);
+			
 			var oldScale:Number = image.scale;
 			image.scale *= scale;
 			image.render(customBuffer != null ? customBuffer : FP.buffer, absoluteUpperLeft, EXTUtility.ZERO_POINT);
