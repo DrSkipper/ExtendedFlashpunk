@@ -114,6 +114,15 @@ package fp.ext
 			ay += fy;
 		}
 		
+		public function zoomWithAnchor(zoomDelta:Number, anchorPoint:Point, measureFromOffsetType:EXTOffsetType)
+		{
+			var currentSize:Point = this.currentViewSize();
+			var fromUpperLeft:Point = EXTUtility.UpperLeftifyCoordinate(anchorPoint, currentSize, measureFromOffsetType);
+			var xProportion:Number = fromUpperLeft.x / currentSize.x;
+			var yProportion:Number = fromUpperLeft.y / currentSize.y;
+			
+		}
+		
 		// Camera will smoothly animate to given position.
 		//   px and py indicate target upper-left camera position.
 		//TODO - fcole - Allow input of various lerping functions
