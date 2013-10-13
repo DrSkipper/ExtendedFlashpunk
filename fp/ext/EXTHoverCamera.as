@@ -110,7 +110,7 @@ package fp.ext
 			}
 		}
 		
-		override public function prepareWorldForRender(world:World):void
+		override public function prepareWorldForRender(world:EXTWorld):void
 		{
 			super.prepareWorldForRender(world);
 			

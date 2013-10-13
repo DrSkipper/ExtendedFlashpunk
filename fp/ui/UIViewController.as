@@ -43,7 +43,7 @@ package fp.ui
 			
 			if (_camera != null)
 			{
-				offsetPosition = new Point( -_camera.x, -_camera.y);
+				offsetPosition = new Point(-_camera.x * _camera.zoom, -_camera.y * _camera.zoom);
 				scale = _camera.zoom;
 				bounds.x *= scale;
 				bounds.y *= scale;

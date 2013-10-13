@@ -36,19 +36,25 @@ package fp.ext
 			_lerpTotalDistance = 0.0;
 		}
 		
-		// Returns the current size of the view, given the camera's 
-		//   current zoom value and the size of the screen.
-		//TODO - fcole - Account for zoom level
+		/**
+		 * @return	The current size of the view, given the camera's 
+		 *    current zoom value and the size of the screen.
+		 */
 		public function currentViewSize():Point
 		{
-			return new Point(FP.screen.width, FP.screen.height);
+			return new Point(FP.screen.width / this.zoom, FP.screen.height / this.zoom);
 		}
 		
+		/**
+		 * Get the current position of the camera
+		 * @param	offsetType				Specifies which alignment of the camera to use
+		 * @param	useLastFramePosition	Whether to use coordinates from the end of the last tick
+		 */
 		public function currentPosition(offsetType:EXTOffsetType, useLastFramePosition:Boolean = false):Point
 		{
 			var screenSize:Point = this.currentViewSize();
-			var baseX:Number = useLastFramePosition ? _lastFrameX : this.x;
-			var baseY:Number = useLastFramePosition ? _lastFrameY : this.y;
+			var baseX:Number = (useLastFramePosition ? _lastFrameX : this.x);
+			var baseY:Number = (useLastFramePosition ? _lastFrameY : this.y);
 			
 			if (offsetType == EXTOffsetType.TOP_LEFT)
 				return new Point(baseX, baseY);
@@ -70,10 +76,23 @@ package fp.ext
 				return new Point(baseX + screenSize.x, baseY + screenSize.y / 2);
 			
 			EXTConsole.error("EXTCamera", "currentPosition()", "Invalid offset found: %s", offsetType.Text);
-			return new Point();		
+			return new Point();
 		}
 		
-		// Current position is offset by given values
+		/**
+		 * Set the position of the camera
+		 * @param	offsetType	How the camera's view frame should align with the given position
+		 * @param	newPoint	The coordinates to align the camera with
+		 */
+		public function setCurrentPosition(offsetType:EXTOffsetType, newPosition:Point)
+		{
+			var screenSize:Point = this.currentViewSize();
+			var newPosition:Point = EXTUtility.UpperLeftifyCoordinate(newPosition, screenSize, offsetType);
+			this.x = newPosition.x;
+			this.y = newPosition.y;
+		}
+		
+		// Move the camera the given amount
 		public function moveDistance(dx:Number, dy:Number):void
 		{
 			x += dx;
@@ -110,8 +129,8 @@ package fp.ext
 			_lerpDestination.x = px;
 			_lerpDestination.y = py;
 			
-			var diffX:Number = px - this.x;
-			var diffY:Number = py - this.y;
+			var diffX:Number = px - _lerpStartPosition.x;
+			var diffY:Number = py - _lerpStartPosition.y;
 			_lerpTotalDistance = Math.sqrt((diffX * diffX) + (diffY * diffY));
 			
 			if (_lerping)
@@ -120,8 +139,8 @@ package fp.ext
 				var xProportion:Number = diffX / _lerpTotalDistance;
 				var yProportion:Number = diffY / _lerpTotalDistance;
 				
-				diffX = this.x - oldStartPosition.x;
-				diffY = this.y - oldStartPosition.y;
+				diffX = _lerpStartPosition.x - oldStartPosition.x;
+				diffY = _lerpStartPosition.y - oldStartPosition.y;
 				var oldDistance:Number = Math.sqrt((diffX * diffX) + (diffY * diffY));
 				
 				this.vx = xProportion * oldVMagnitude;
@@ -142,6 +161,8 @@ package fp.ext
 			if (offsetType == null)
 				offsetType = EXTOffsetType.CENTER;
 			
+			px /= this.zoom;
+			py /= this.zoom;
 			var startingPoint:Point = this.currentPosition(EXTOffsetType.TOP_LEFT, true);
 			var destination:Point = new Point(startingPoint.x + px, startingPoint.y + py);
 			var screenSize:Point = this.currentViewSize();
@@ -153,6 +174,8 @@ package fp.ext
 																		 offsetType);
 			this.lerpToPosition(startingPoint.x + distance.x, 
 								startingPoint.y + distance.y);
+			var cameraPoint:Point = this.currentPosition(EXTOffsetType.CENTER);
+			EXTConsole.debug("EXTCamera", "lerpToCameraRelativePosition()", "x", this.x, " y", this.y, " px", px, " py", py, " distance.x", distance.x, " distance.y", distance.y, " cameraCenter.x", cameraPoint.x, " cameraCenter.y", cameraPoint.y);
 		}
 		
 		// Update the camera's world offsets
@@ -171,14 +194,14 @@ package fp.ext
 		}
 		
 		// Apply the camera's world offsets to the world
-		public function prepareWorldForRender(world:World):void
+		//NOTE - Zoom is applied manually in EXTWorld
+		public function prepareWorldForRender(world:EXTWorld):void
 		{
 			_lastFrameX = this.x;
 			_lastFrameY = this.y;
 			
-			world.camera.x = (int)(this.x);
-			world.camera.y = (int)(this.y);
-			//TODO - fcole - zoom
+			world.camera.x = (int)(this.x * this.zoom);
+			world.camera.y = (int)(this.y * this.zoom);
 		}
 		
 		
@@ -238,6 +261,8 @@ package fp.ext
 				this.vy = 0;
 				this.ax = 0;
 				this.ay = 0;
+				var cameraPoint:Point = this.currentPosition(EXTOffsetType.CENTER);
+				EXTConsole.debug("EXTCamera", "updateLerping()", "x", this.x, " y", this.y, " cameraCenter.x", cameraPoint.x, " cameraCenter.y", cameraPoint.y);
 			}
 		}
 	}
