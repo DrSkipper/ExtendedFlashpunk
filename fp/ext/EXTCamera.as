@@ -113,6 +113,13 @@ package fp.ext
 			ay += fy;
 		}
 		
+		/**
+		 * Modify the zoom level of the camera while anchoring at a specific location.
+		 *    (Editing the zoom attribute directly will zoom from the upper-left corner).
+		 * @param	zoomDelta				The amount to change the zoom by
+		 * @param	anchorPoint				The point to anchor the zoom at
+		 * @param	measureFromOffsetType	Where the anchor point is measured from, within the camera's view
+		 */
 		public function zoomWithAnchor(zoomDelta:Number, anchorPoint:Point, measureFromOffsetType:EXTOffsetType):void
 		{
 			var currentSize:Point = this.currentViewSize();
@@ -194,8 +201,6 @@ package fp.ext
 																		 offsetType);
 			this.lerpToPosition(startingPoint.x + distance.x, 
 								startingPoint.y + distance.y);
-			var cameraPoint:Point = this.currentPosition(EXTOffsetType.CENTER);
-			EXTConsole.debug("EXTCamera", "lerpToCameraRelativePosition()", "x", this.x, " y", this.y, " px", px, " py", py, " distance.x", distance.x, " distance.y", distance.y, " cameraCenter.x", cameraPoint.x, " cameraCenter.y", cameraPoint.y);
 		}
 		
 		// Update the camera's world offsets
@@ -281,8 +286,6 @@ package fp.ext
 				this.vy = 0;
 				this.ax = 0;
 				this.ay = 0;
-				var cameraPoint:Point = this.currentPosition(EXTOffsetType.CENTER);
-				EXTConsole.debug("EXTCamera", "updateLerping()", "x", this.x, " y", this.y, " cameraCenter.x", cameraPoint.x, " cameraCenter.y", cameraPoint.y);
 			}
 		}
 	}
