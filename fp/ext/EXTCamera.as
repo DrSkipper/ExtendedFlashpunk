@@ -7,7 +7,6 @@ package fp.ext
 	import fp.ext.EXTUtility;
 	
 	import net.flashpunk.FP;
-	import net.flashpunk.World;
 
 	// Extended Camera
 	// Handles transformations to be made to the world before rendering
@@ -84,10 +83,10 @@ package fp.ext
 		 * @param	offsetType	How the camera's view frame should align with the given position
 		 * @param	newPoint	The coordinates to align the camera with
 		 */
-		public function setCurrentPosition(offsetType:EXTOffsetType, newPosition:Point)
+		public function setCurrentPosition(offsetType:EXTOffsetType, newPosition:Point):void
 		{
 			var screenSize:Point = this.currentViewSize();
-			var newPosition:Point = EXTUtility.UpperLeftifyCoordinate(newPosition, screenSize, offsetType);
+			newPosition = EXTUtility.UpperLeftifyCoordinate(newPosition, screenSize, offsetType);
 			this.x = newPosition.x;
 			this.y = newPosition.y;
 		}
@@ -114,13 +113,25 @@ package fp.ext
 			ay += fy;
 		}
 		
-		public function zoomWithAnchor(zoomDelta:Number, anchorPoint:Point, measureFromOffsetType:EXTOffsetType)
+		public function zoomWithAnchor(zoomDelta:Number, anchorPoint:Point, measureFromOffsetType:EXTOffsetType):void
 		{
 			var currentSize:Point = this.currentViewSize();
 			var fromUpperLeft:Point = EXTUtility.UpperLeftifyCoordinate(anchorPoint, currentSize, measureFromOffsetType);
 			var xProportion:Number = fromUpperLeft.x / currentSize.x;
 			var yProportion:Number = fromUpperLeft.y / currentSize.y;
 			
+			zoom += zoomDelta;
+			
+			var newSize:Point = this.currentViewSize();
+			var newXWithProportion:Number = xProportion * newSize.x;
+			var newYWithProportion:Number = yProportion * newSize.y;
+			
+			var xDiff:Number = newXWithProportion - fromUpperLeft.x;
+			var yDiff:Number = newYWithProportion - fromUpperLeft.y;
+			
+			this.moveDistance(xDiff, yDiff);
+			_lerpDestination.x += xDiff;
+			_lerpDestination.y += yDiff;
 		}
 		
 		// Camera will smoothly animate to given position.
