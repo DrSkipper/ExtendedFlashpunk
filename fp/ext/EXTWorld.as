@@ -8,12 +8,20 @@ package fp.ext
 	import net.flashpunk.FP;
 	import fp.ui.UIViewController;
 	
+	/**
+	 * Extended World
+	 * Subclass of Flashpunk's World which now contains references
+	 * to a fully functional camera and root UI objects.
+	 */
 	public class EXTWorld extends World
 	{
 		public var worldCamera:EXTCamera;
-		public var staticUiController:UIViewController;
-		public var relativeUiController:UIViewController;
+		public var staticUiController:UIViewController;		// Controls non-camera relative UI
+		public var relativeUiController:UIViewController;	// Controls camera relative UI
 		
+		/**
+		 * Constructor
+		 */
 		public function EXTWorld()
 		{
 			super();
@@ -25,18 +33,33 @@ package fp.ext
 			relativeUiController = new UIViewController(screenSize, worldCamera);
 		}
 		
+		/**
+		 * Update the world's camera, entities, and UI
+		 */
 		override public function update():void
 		{
+			// Update the world, and camera
 			worldCamera.update();
 			super.update();
-			worldCamera.prepareWorldForRender(this);
+			
+			// Prepare the world for rendering using camera's position
+			this.camera.x = (int)(this.worldCamera.x * this.worldCamera.zoom);
+			this.camera.y = (int)(this.worldCamera.y * this.worldCamera.zoom);
+			
+			// Update the UI
 			relativeUiController.update();
 			staticUiController.update();
 		}
 		
+		/**
+		 * Render the world's entities and UI
+		 */
 		override public function render():void
 		{
 			// Make sure to apply our camera's zoom to our entities' images
+			//NOTE - This hackish solution for zooming allows us the desired effect without
+			//		 directly messing with Flashpunk's code or other overhead like adding a
+			//		 number of subclasses
 			var needToApplyZoom:Boolean = worldCamera.zoom != 1.0 && worldCamera.zoom != 0.0;
 			
 			if (needToApplyZoom)
@@ -53,6 +76,12 @@ package fp.ext
 			staticUiController.render();
 		}
 		
+		/**
+		 * Adds the Entity to the World at the end of the frame.
+		 * Overridden so we can keep track of entities.
+		 * @param	e		Entity object you want to add
+		 * @return	The added Entity object
+		 */
 		override public function add(e:Entity):Entity
 		{
 			_entities.push(e);
@@ -60,7 +89,10 @@ package fp.ext
 		}
 		
 		
-		// Protected
+		/**
+		 * Protected
+		 * See NOTE in render() method above for explanation of usage
+		 */
 		protected var _entities:Vector.<Entity>;
 		
 		protected function applyCameraZoomToEntities():void

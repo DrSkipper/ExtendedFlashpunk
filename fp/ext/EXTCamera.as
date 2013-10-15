@@ -1,20 +1,22 @@
 package fp.ext
 {
 	import flash.geom.Point;
-	
+	import net.flashpunk.FP;
 	import fp.ext.EXTConsole;
 	import fp.ext.EXTOffsetType;
 	import fp.ext.EXTUtility;
-	
-	import net.flashpunk.FP;
 
-	// Extended Camera
-	// Handles transformations to be made to the world before rendering
-	// Created by Fletcher, 6/2/13
+	/**
+	 * Extended Camera
+	 * Handles transformations to be made to the world before rendering
+	 * Created by Fletcher, 6/2/13
+	 */
 	public class EXTCamera
 	{
-		// Public Variables
-		// x and y represent pixel coordinates in the world when zoom is at 1.0
+		/**
+		 * Public Variables
+		 * x and y represent pixel coordinates in the world when zoom is at 1.0
+		 */
 		public var x:Number = 0;      // Position (upper-left)
 		public var y:Number = 0;
 		public var vx:Number = 0;     // Velocity
@@ -25,7 +27,9 @@ package fp.ext
 		public var zoomVelocity:Number = 0;
 		public var zoomAcceleration:Number = 0;
 		
-		// Constructor
+		/**
+		 * Constructor
+		 */
 		public function EXTCamera()
 		{
 			_lastFrameX = _lastFrameY = 0.0;
@@ -91,22 +95,33 @@ package fp.ext
 			this.y = newPosition.y;
 		}
 		
-		// Move the camera the given amount
+		/**
+		 * Move the camera a given amount
+		 * @param	dx	Offset to move camera by along x-axis
+		 * @param	dy	Offste to move camera by along y-axis
+		 */
 		public function moveDistance(dx:Number, dy:Number):void
 		{
 			x += dx;
 			y += dy;
 		}
 		
-		// Current velocity is offset by given values
+		/**
+		 * Change the camera's velocity
+		 * @param	dvx	Offset to apply to x velocity
+		 * @param	dvy	Offset to apply to y velocity
+		 */
 		public function alterVelocity(dvx:Number, dvy:Number):void
 		{
 			vx += dvx;
 			vy += dvy;
 		}
 		
-		// Current acceleration is offset by given values
-		//  fx and fy are in units of pixels per second per second
+		/**
+		 * Change the camera's acceleration
+		 * @param	fx	Force to apply to camera along x-axis, in pixels per second per second
+		 * @param	fy	Force to apply to camera along y-axis, in pixels per second per second
+		 */
 		public function applyForce(fx:Number, fy:Number):void
 		{
 			ax += fx;
@@ -141,8 +156,11 @@ package fp.ext
 			_lerpDestination.y += yDiff;
 		}
 		
-		// Camera will smoothly animate to given position.
-		//   px and py indicate target upper-left camera position.
+		/**
+		 * Camera will smoothly animate to given position.
+		 * @param	px	Target upper-left x position for camera
+		 * @param	py	Target upper-left y position for camera
+		 */
 		//TODO - fcole - Allow input of various lerping functions
 		public function lerpToPosition(px:Number, py:Number):void
 		{
@@ -179,9 +197,12 @@ package fp.ext
 			_lerping = true;
 		}
 		
-		// More useful lerping method.
-		//  offsetType - How the camera's view should align with the 
-		//               given point upon completion
+		/**
+		 * More useful lerping method.
+		 * @param	px			X location, in screen coordinates, which camera should lerp to
+		 * @param	py			Y location, in screen coordinates, which camera should lerp to
+		 * @param	offsetType	How the camera should align with the given location (defaults to CENTER)
+		 */
 		public function lerpToCameraRelativePosition(px:Number, py:Number, offsetType:EXTOffsetType = null):void
 		{
 			// Assume we normally want the camera to center on the specified point
@@ -203,7 +224,9 @@ package fp.ext
 								startingPoint.y + distance.y);
 		}
 		
-		// Update the camera's world offsets
+		/**
+		 * Update the camera's world offsets
+		 */
 		public function update():void
 		{
 			if (_lerping)
@@ -216,21 +239,15 @@ package fp.ext
 			
 			zoomVelocity += zoomAcceleration;
 			zoom += zoomVelocity;
-		}
-		
-		// Apply the camera's world offsets to the world
-		//NOTE - Zoom is applied manually in EXTWorld
-		public function prepareWorldForRender(world:EXTWorld):void
-		{
+			
 			_lastFrameX = this.x;
 			_lastFrameY = this.y;
-			
-			world.camera.x = (int)(this.x * this.zoom);
-			world.camera.y = (int)(this.y * this.zoom);
 		}
 		
 		
-		// Private
+		/**
+		 * Private
+		 */
 		private var _lastFrameX:Number;
 		private var _lastFrameY:Number;
 		
