@@ -135,17 +135,17 @@ package fp.ext
 		}
 		
 		
-		//Private
-		private var _hovering:Boolean;
-		private var _hoverSpeed:Number;
-		private var _maxHover:Point;
-		private var _hoverOffset:Point;
-		private var _hoverTarget:Point;
-		private var _hoverVelocity:Point;
-		private var _hoverDistance:Point;
+		//Protected
+		protected var _hovering:Boolean;
+		protected var _hoverSpeed:Number;
+		protected var _maxHover:Point;
+		protected var _hoverOffset:Point;
+		protected var _hoverTarget:Point;
+		protected var _hoverVelocity:Point;
+		protected var _hoverDistance:Point;
 		
 		// Find a random point in an ellipse created by the hover variance
-		private function findHoverTarget():void
+		protected function findHoverTarget():void
 		{
 			if (_maxHover.x == 0.0)
 			{
