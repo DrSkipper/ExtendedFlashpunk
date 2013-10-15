@@ -42,14 +42,36 @@ package fp.ext
 		public function disableHovering():void
 		{
 			_hovering = false;
+			this.x -= _hoverOffset.x;
+			this.y -= _hoverOffset.y;
 		}
 		
 		// Overridden EXTCamera methods
 		override public function update():void
 		{
-			super.update();
+			var oldX:Number = this.x;
+			var oldY:Number = this.y;
+			
 			if (_hovering)
 			{
+				this.x -= _hoverOffset.x;
+				this.y -= _hoverOffset.y;
+				oldX = this.x;
+				oldY = this.y;
+			}
+			
+			super.update();
+			
+			if (_hovering)
+			{
+				if (_lerping)
+				{
+					var diffX:Number = this.x - oldX;
+					var diffY:Number = this.y - oldY;
+					_hoverTarget.x += diffX;
+					_hoverTarget.y += diffY;
+				}
+				
 				var hoverDistance:Point = _hoverTarget.subtract(_hoverOffset);
 				var distanceMagnitude:Number = hoverDistance.length;
 				var newTarget:Boolean = false;
@@ -107,17 +129,8 @@ package fp.ext
 				
 				_hoverOffset.x += _hoverVelocity.x;
 				_hoverOffset.y += _hoverVelocity.y;
-			}
-		}
-		
-		override public function prepareWorldForRender(world:EXTWorld):void
-		{
-			super.prepareWorldForRender(world);
-			
-			if (_hovering)
-			{
-				world.camera.x = (int)(this.x + _hoverOffset.x);
-				world.camera.y = (int)(this.y + _hoverOffset.y);
+				this.x += _hoverOffset.x;
+				this.y += _hoverOffset.y;
 			}
 		}
 		

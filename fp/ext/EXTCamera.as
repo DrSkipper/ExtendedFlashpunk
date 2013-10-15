@@ -246,19 +246,19 @@ package fp.ext
 		
 		
 		/**
-		 * Private
+		 * Protected
 		 */
-		private var _lastFrameX:Number;
-		private var _lastFrameY:Number;
+		protected var _lastFrameX:Number;
+		protected var _lastFrameY:Number;
 		
-		private static const _LERP_SPEED_:Number = 0.5;
-		private var _lerping:Boolean;
-		private var _lerpStartPosition:Point;
-		private var _lerpDestination:Point;
-		private var _lerpTotalDistance:Number;
+		protected static const _LERP_SPEED_:Number = 0.5;
+		protected var _lerping:Boolean;
+		protected var _lerpStartPosition:Point;
+		protected var _lerpDestination:Point;
+		protected var _lerpTotalDistance:Number;
 		
 		//TODO - fcole - Allow input of various lerping functions
-		private function updateLerping():void
+		protected function updateLerping():void
 		{
 			var diffX:Number = _lerpDestination.x - this.x;
 			var diffY:Number = _lerpDestination.y - this.y;
