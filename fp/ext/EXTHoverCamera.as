@@ -54,10 +54,18 @@ package fp.ext
 			
 			if (_hovering)
 			{
-				this.x -= _hoverOffset.x;
-				this.y -= _hoverOffset.y;
-				oldX = this.x;
-				oldY = this.y;
+				if (_lerping)
+				{
+					_hoverOffset.x = 0;
+					_hoverOffset.y = 0;
+				}
+				else
+				{
+					this.x -= _hoverOffset.x;
+					this.y -= _hoverOffset.y;
+					oldX = this.x;
+					oldY = this.y;
+				}
 			}
 			
 			super.update();
@@ -66,71 +74,73 @@ package fp.ext
 			{
 				if (_lerping)
 				{
-					var diffX:Number = this.x - oldX;
-					var diffY:Number = this.y - oldY;
-					_hoverTarget.x += diffX;
-					_hoverTarget.y += diffY;
-				}
-				
-				var hoverDistance:Point = _hoverTarget.subtract(_hoverOffset);
-				var distanceMagnitude:Number = hoverDistance.length;
-				var newTarget:Boolean = false;
-				
-//				if (distanceMagnitude <= 2 * _hoverSpeed)
-				if ((hoverDistance.x < 0 && _hoverDistance.x >= 0) ||
-					(hoverDistance.x >= 0 && _hoverDistance.x < 0) ||
-					(hoverDistance.y < 0 && _hoverDistance.y >= 0) ||
-					(hoverDistance.y >= 0 && _hoverDistance.y < 0))
-				{
-					newTarget = true;
-					this.findHoverTarget();
-					
-					hoverDistance = _hoverTarget.subtract(_hoverOffset);
-					_hoverDistance.x = hoverDistance.x;
-					_hoverDistance.y = hoverDistance.y;
-					_hoverVelocity.x = 0;
-					_hoverVelocity.y = 0;
-				}
-				
-				var _hoverVelocityMagnitude:Number = _hoverVelocity.length;
-				hoverDistance.normalize(1.0);
-				
-				if (!newTarget && distanceMagnitude <= _hoverDistance.length / 3.0)
-				{
-					if (_hoverVelocityMagnitude > _hoverSpeed)
-					{
-						_hoverVelocity.x -= hoverDistance.x * _hoverSpeed;
-						_hoverVelocity.y -= hoverDistance.y * _hoverSpeed;
-					}
-					else
-					{
-						_hoverVelocity.x = hoverDistance.x * _hoverSpeed;
-						_hoverVelocity.y = hoverDistance.y * _hoverSpeed;
-					}
+					_hoverTarget.x = this.x;
+					_hoverTarget.y = this.y;
+					_hoverDistance.x = 0;
+					_hoverDistance.y = 0;
 				}
 				else
 				{
-					if (distanceMagnitude > _hoverDistance.length * 2.0 / 3.0)
+					var hoverDistance:Point = _hoverTarget.subtract(_hoverOffset);
+					var distanceMagnitude:Number = hoverDistance.length;
+					var newTarget:Boolean = false;
+					
+					//if (distanceMagnitude <= 2 * _hoverSpeed)
+					if ((hoverDistance.x < 0 && _hoverDistance.x >= 0) ||
+						(hoverDistance.x >= 0 && _hoverDistance.x < 0) ||
+						(hoverDistance.y < 0 && _hoverDistance.y >= 0) ||
+						(hoverDistance.y >= 0 && _hoverDistance.y < 0))
 					{
-						var maxSpeed:Number = _hoverSpeed * 5;
+						newTarget = true;
+						this.findHoverTarget();
 						
-//						if (_hoverVelocityMagnitude < maxSpeed)
-//						{
-						_hoverVelocity.x += hoverDistance.x * _hoverSpeed;
-						_hoverVelocity.y += hoverDistance.y * _hoverSpeed;
-//						}
-//						else
-//						{
-//							_hoverVelocity.x = hoverDistance.x * _hoverSpeed;
-//							_hoverVelocity.y = hoverDistance.y * _hoverSpeed;
-//						}
+						hoverDistance = _hoverTarget.subtract(_hoverOffset);
+						_hoverDistance.x = hoverDistance.x;
+						_hoverDistance.y = hoverDistance.y;
+						_hoverVelocity.x = 0;
+						_hoverVelocity.y = 0;
 					}
+					
+					var _hoverVelocityMagnitude:Number = _hoverVelocity.length;
+					hoverDistance.normalize(1.0);
+					
+					if (!newTarget && distanceMagnitude <= _hoverDistance.length / 3.0)
+					{
+						if (_hoverVelocityMagnitude > _hoverSpeed)
+						{
+							_hoverVelocity.x -= hoverDistance.x * _hoverSpeed;
+							_hoverVelocity.y -= hoverDistance.y * _hoverSpeed;
+						}
+						else
+						{
+							_hoverVelocity.x = hoverDistance.x * _hoverSpeed;
+							_hoverVelocity.y = hoverDistance.y * _hoverSpeed;
+						}
+					}
+					else
+					{
+						if (distanceMagnitude > _hoverDistance.length * 2.0 / 3.0)
+						{
+							var maxSpeed:Number = _hoverSpeed * 5;
+							
+							//if (_hoverVelocityMagnitude < maxSpeed)
+							//{
+							_hoverVelocity.x += hoverDistance.x * _hoverSpeed;
+							_hoverVelocity.y += hoverDistance.y * _hoverSpeed;
+							//}
+							//else
+							//{
+								//_hoverVelocity.x = hoverDistance.x * _hoverSpeed;
+								//_hoverVelocity.y = hoverDistance.y * _hoverSpeed;
+							//}
+						}
+					}
+					
+					_hoverOffset.x += _hoverVelocity.x;
+					_hoverOffset.y += _hoverVelocity.y;
+					this.x += _hoverOffset.x;
+					this.y += _hoverOffset.y;
 				}
-				
-				_hoverOffset.x += _hoverVelocity.x;
-				_hoverOffset.y += _hoverVelocity.y;
-				this.x += _hoverOffset.x;
-				this.y += _hoverOffset.y;
 			}
 		}
 		
