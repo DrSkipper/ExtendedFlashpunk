@@ -17,6 +17,11 @@ package fp.ui
 		public var image:Image;
 		public var customBuffer:BitmapData = null;
 		
+		/**
+		 * Constructor
+		 * @param	position	The initial position of the View, relative to its parent
+		 * @param	image		The image to render in this view and determine its size
+		 */
 		public function UIImageView(position:Point, image:Image) 
 		{
 			var size:Point = image != null ? new Point(image.scaledWidth, image.scaledHeight) : EXTUtility.ZERO_POINT;
@@ -25,6 +30,14 @@ package fp.ui
 			this.image = image;
 		}
 		
+		/**
+		 * Protected
+		 * 
+		 * Override UIView's renderContent() to render an image at this location
+		 * @param	absoluteUpperLeft	Screen coordinate to place content at.
+		 * @param	absoluteSize		Bounds to render content within.
+		 * @param	scale				Zoom level, for scaling images to match.
+		 */
 		override protected function renderContent(absoluteUpperLeft:Point, absoluteSize:Point, scale:Number):void
 		{
 			super.renderContent(absoluteUpperLeft, absoluteSize, scale);

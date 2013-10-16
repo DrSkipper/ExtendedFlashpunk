@@ -17,17 +17,23 @@ package fp.ui
 	 */
 	public class UIView
 	{
-		// Standard positioning fields
+		/**
+		 * Standard positioning fields
+		 */
 		public var position:Point;
 		public var size:Point;
 		
-		// Offsets to measure positions from.
-		// Defaults to centering this view in the center of it's parent's view.
+		/**
+		 * Offsets to measure positions from.
+		 * Defaults to centering this view in the center of it's parent's view.
+		 */
 		public var offsetAlignmentInParent:EXTOffsetType = EXTOffsetType.CENTER;
 		public var offsetAlignmentForSelf:EXTOffsetType = EXTOffsetType.CENTER;
 		
-		// Set the background of the View to a constant color.
-		// Useful for debugging, or for drawing colored quads in UI.
+		/**
+		 * Accessor for setting the background of the View to a constant color.
+		 * Useful for debugging, or for drawing colored quads in UI.
+		 */
 		public function get backgroundColor():EXTColor
 		{ 
 			if (_backgroundColor == null)
@@ -37,6 +43,7 @@ package fp.ui
 		
 		/**
 		 * Constructor. Set up initial transforms.
+		 * Use these parameters in conjunction with offset types above to determine layout.
 		 * @param	position	The initial position of the View, relative to its parent
 		 * @param	size		The initial size of the View
 		 */
@@ -61,7 +68,7 @@ package fp.ui
 		/**
 		 * Remove a View from this View's list of subviews.
 		 * @param	subview	The View to remove from this View's subviews.
-		 * @return			The View which was removed, or null if it wasn't found.
+		 * @return	The View which was removed, or null if it wasn't found.
 		 */
 		public function removeSubview(subview:UIView):UIView
 		{
@@ -118,14 +125,17 @@ package fp.ui
 				view.render(myAbsoluteUpperLeft, mySize, scale);
 		}
 		
-		
-		// Protected
-		
-		// Array of subviews
-		// Public access through addSubview() and removeSubview()
+		/**
+		 * Protected
+		 * 
+		 * Array of subviews
+		 * Public access through addSubview() and removeSubview()
+		 */
 		protected var _subviews:Vector.<UIView> = null;
 		
-		// Handling of background color
+		/**
+		 * Handling of background color
+		 */
 		protected var _backgroundColor:EXTColor = null;
 		protected var _backgroundColorCanvas:Canvas = null;
 		protected var _backgroundColorRectangle:Rectangle = null;

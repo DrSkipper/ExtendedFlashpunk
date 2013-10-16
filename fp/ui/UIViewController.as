@@ -14,6 +14,10 @@ package fp.ui
 	 */
 	public class UIViewController 
 	{
+		/**
+		 * The root view of the UI tree managed by this controller.
+		 * UI for this tree should be added as subviews to this view.
+		 */
 		public var rootView:UIView;
 		
 		/**
@@ -30,11 +34,17 @@ package fp.ui
 			_camera = camera;
 		}
 		
+		/**
+		 * Update the UI owned by this controller
+		 */
 		public function update():void
 		{
 			rootView.update();
 		}
 		
+		/**
+		 * Render the UI owned by this controller
+		 */
 		public function render():void
 		{
 			var offsetPosition:Point = EXTUtility.ZERO_POINT;
@@ -52,6 +62,9 @@ package fp.ui
 			rootView.render(offsetPosition, bounds, scale);
 		}
 		
+		/**
+		 * Protected
+		 */
 		protected var _camera:EXTCamera = null;
 	}
 }
