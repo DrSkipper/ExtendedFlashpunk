@@ -16,3 +16,8 @@ More Info
 -----------------
 
 Check out the [wiki!](https://github.com/DrSkipper/ExtendedFlashpunk/wiki)
+
+Feedback
+-----------------
+
+Head over to the [issues section](https://github.com/DrSkipper/ExtendedFlashpunk/issues?state=open) to ask questions, post bugs, or suggest features!
