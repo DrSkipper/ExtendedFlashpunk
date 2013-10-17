@@ -12,3 +12,7 @@ Features
 * Extended Console and Input functionality (Controller Support coming soon)
 * Some utility and helper classes
 
+More Info
+-----------------
+
+Check out the [wiki!](https://github.com/DrSkipper/ExtendedFlashpunk/wiki)
