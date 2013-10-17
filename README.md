@@ -12,6 +12,10 @@ Features
 * Extended Console and Input functionality (Controller Support coming soon)
 * Some utility and helper classes
 
+Requirements
+-----------------
+This project extends and heavily utilizes much of the [Flashpunk](http://useflashpunk.net/) engine, which must be downloaded separately.
+
 More Info
 -----------------
 
