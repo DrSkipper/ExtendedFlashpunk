@@ -152,7 +152,7 @@ package fp.ext
 			}
 			else
 			{
-				//TODO - fcole - warning
+				EXTConsole.warn("EXTUtility", "AbsolutePositionOfPointInContainer", "Unknown OffsetType %s", offsetType);
 			}
 			
 			returnValue.x += absolutePoint.x;

@@ -35,7 +35,7 @@ package fp.ui
 			this._map.add("Down", [0]);
 			
 //			graphic = _map;
-			this._map.centerOO();
+			this._map.centerOrigin();
 			this.addGraphic(_map);
 			this.setHitbox(frameW, frameH);
 			this.layer = -2;
