@@ -152,7 +152,8 @@ package fp.ext
 			}
 			else
 			{
-				EXTConsole.warn("EXTUtility", "AbsolutePositionOfPointInContainer", "Unknown OffsetType %s", offsetType);
+				EXTConsole.warn("EXTUtility", "AbsolutePositionOfPointInContainer", 
+								"Unknown OffsetType %s", offsetType);
 			}
 			
 			returnValue.x += absolutePoint.x;
