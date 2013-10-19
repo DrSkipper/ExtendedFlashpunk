@@ -44,6 +44,13 @@ package fp.ext
 			_hovering = false;
 			this.x -= _hoverOffset.x;
 			this.y -= _hoverOffset.y;
+			_hoverOffset.x = 0;
+			_hoverOffset.y = 0;
+		}
+		
+		public function get hovering():Boolean
+		{
+			return _hovering;
 		}
 		
 		// Overridden EXTCamera methods
