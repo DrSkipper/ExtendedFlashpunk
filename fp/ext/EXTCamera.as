@@ -14,18 +14,18 @@ package fp.ext
 	public class EXTCamera
 	{
 		/**
-		 * Public Variables
+		 * Public Accessors
 		 * x and y represent pixel coordinates in the world when zoom is at 1.0
 		 */
-		public var x:Number = 0;      // Position (upper-left)
-		public var y:Number = 0;
-		public var vx:Number = 0;     // Velocity
-		public var vy:Number = 0;
-		public var ax:Number = 0;  	  // Acceleration
-		public var ay:Number = 0;
-		public var zoom:Number = 1.0; // Zoom
-		public var zoomVelocity:Number = 0;
-		public var zoomAcceleration:Number = 0;
+		public function get x():Number { return _x };		// Position (upper-left)
+		public function get y():Number { return _y };
+		public function get vx():Number { return _vx }; 	// Velocity
+		public function get vy():Number { return _vy };
+		public function get ax():Number { return _ax }; 	// Acceleration
+		public function get ay():Number { return _ay };
+		public function get zoom():Number { return _zoom }; // Zoom
+		public function get zoomVelocity():Number { return _zoomVelocity };
+		public function get zoomAcceleration():Number { return _zoomAcceleration };
 		
 		/**
 		 * Constructor
@@ -45,7 +45,7 @@ package fp.ext
 		 */
 		public function currentViewSize():Point
 		{
-			return new Point(FP.screen.width / this.zoom, FP.screen.height / this.zoom);
+			return new Point(FP.screen.width / _zoom, FP.screen.height / _zoom);
 		}
 		
 		/**
@@ -56,8 +56,8 @@ package fp.ext
 		public function currentPosition(offsetType:EXTOffsetType, useLastFramePosition:Boolean = false):Point
 		{
 			var screenSize:Point = this.currentViewSize();
-			var baseX:Number = (useLastFramePosition ? _lastFrameX : this.x);
-			var baseY:Number = (useLastFramePosition ? _lastFrameY : this.y);
+			var baseX:Number = (useLastFramePosition ? _lastFrameX : _x);
+			var baseY:Number = (useLastFramePosition ? _lastFrameY : _y);
 			
 			if (offsetType == EXTOffsetType.TOP_LEFT)
 				return new Point(baseX, baseY);
@@ -91,8 +91,8 @@ package fp.ext
 		{
 			var screenSize:Point = this.currentViewSize();
 			newPosition = EXTUtility.UpperLeftifyCoordinate(newPosition, screenSize, offsetType);
-			this.x = newPosition.x;
-			this.y = newPosition.y;
+			_x = newPosition.x;
+			_y = newPosition.y;
 		}
 		
 		/**
@@ -102,8 +102,13 @@ package fp.ext
 		 */
 		public function moveDistance(dx:Number, dy:Number):void
 		{
-			x += dx;
-			y += dy;
+			if (_lerping && _lerpDestination != null)
+			{
+				_lerpDestination.x += dx;
+				_lerpDestination.y += dy;
+			}
+			_x += dx;
+			_y += dy;
 		}
 		
 		/**
@@ -113,8 +118,11 @@ package fp.ext
 		 */
 		public function alterVelocity(dvx:Number, dvy:Number):void
 		{
-			vx += dvx;
-			vy += dvy;
+			if (!_lerping)
+			{
+				_vx += dvx;
+				_vy += dvy;
+			}
 		}
 		
 		/**
@@ -124,8 +132,11 @@ package fp.ext
 		 */
 		public function applyForce(fx:Number, fy:Number):void
 		{
-			ax += fx;
-			ay += fy;
+			if (!_lerping)
+			{
+				_ax += fx;
+				_ay += fy;
+			}
 		}
 		
 		/**
@@ -137,12 +148,18 @@ package fp.ext
 		 */
 		public function zoomWithAnchor(zoomDelta:Number, anchorPoint:Point, measureFromOffsetType:EXTOffsetType):void
 		{
+			if (_lerping)
+			{
+				EXTConsole.debug("EXTCamera", "zoomWithAnchor()", "Cannot zoom while lerping");
+				return;
+			}
+			
 			var currentSize:Point = this.currentViewSize();
 			var fromUpperLeft:Point = EXTUtility.UpperLeftifyCoordinate(anchorPoint, currentSize, measureFromOffsetType);
 			var xProportion:Number = fromUpperLeft.x / currentSize.x;
 			var yProportion:Number = fromUpperLeft.y / currentSize.y;
 			
-			zoom += zoomDelta;
+			_zoom += zoomDelta;
 			
 			var newSize:Point = this.currentViewSize();
 			var newXWithProportion:Number = xProportion * newSize.x;
@@ -166,11 +183,11 @@ package fp.ext
 		{
 			var oldStartPosition:Point = _lerpStartPosition;
 			
-			this.ax = 0;
-			this.ay = 0;
+			_ax = 0;
+			_ay = 0;
 			
-			_lerpStartPosition.x = this.x;
-			_lerpStartPosition.y = this.y;
+			_lerpStartPosition.x = _x;
+			_lerpStartPosition.y = _y;
 			_lerpDestination.x = px;
 			_lerpDestination.y = py;
 			
@@ -188,8 +205,8 @@ package fp.ext
 				diffY = _lerpStartPosition.y - oldStartPosition.y;
 				var oldDistance:Number = Math.sqrt((diffX * diffX) + (diffY * diffY));
 				
-				this.vx = xProportion * oldVMagnitude;
-				this.vy = yProportion * oldVMagnitude;
+				_vx = xProportion * oldVMagnitude;
+				_vy = yProportion * oldVMagnitude;
 				
 				_lerpTotalDistance += oldDistance;
 			}
@@ -209,8 +226,8 @@ package fp.ext
 			if (offsetType == null)
 				offsetType = EXTOffsetType.CENTER;
 			
-			px /= this.zoom;
-			py /= this.zoom;
+			px /= _zoom;
+			py /= _zoom;
 			var startingPoint:Point = this.currentPosition(EXTOffsetType.TOP_LEFT, true);
 			var destination:Point = new Point(startingPoint.x + px, startingPoint.y + py);
 			var screenSize:Point = this.currentViewSize();
@@ -232,25 +249,41 @@ package fp.ext
 			if (_lerping)
 				this.updateLerping();
 			
-			vx += ax;
-			vy += ay;
-			x += vx;
-			y += vy;
+			_vx += _ax;
+			_vy += _ay;
+			_x += _vx;
+			_y += _vy;
 			
-			zoomVelocity += zoomAcceleration;
-			zoom += zoomVelocity;
+			if (!_lerping)
+			{
+				_zoomVelocity += _zoomAcceleration;
+				_zoom += _zoomVelocity;
+			}
 			
-			_lastFrameX = this.x;
-			_lastFrameY = this.y;
+			_lastFrameX = _x;
+			_lastFrameY = _y;
 		}
 		
 		
 		/**
 		 * Protected
 		 */
+		protected var _x:Number = 0;      // Position (upper-left)
+		protected var _y:Number = 0;
+		protected var _vx:Number = 0;     // Velocity
+		protected var _vy:Number = 0;
+		protected var _ax:Number = 0;  	  // Acceleration
+		protected var _ay:Number = 0;
+		protected var _zoom:Number = 1.0; // Zoom
+		protected var _zoomVelocity:Number = 0;
+		protected var _zoomAcceleration:Number = 0;
+		
 		protected var _lastFrameX:Number;
 		protected var _lastFrameY:Number;
 		
+		/**
+		 * Lerping implementation
+		 */
 		protected static const _LERP_SPEED_:Number = 0.5;
 		protected var _lerping:Boolean;
 		protected var _lerpStartPosition:Point;
@@ -260,49 +293,53 @@ package fp.ext
 		//TODO - fcole - Allow input of various lerping functions
 		protected function updateLerping():void
 		{
-			var diffX:Number = _lerpDestination.x - this.x;
-			var diffY:Number = _lerpDestination.y - this.y;
+			var diffX:Number = _lerpDestination.x - _x;
+			var diffY:Number = _lerpDestination.y - _y;
 			var distance:Number = Math.sqrt((diffX * diffX) + (diffY * diffY));
 			var reachedDestination:Boolean = true;
 			
-			if (distance > 0.0)
+			if (distance > 0.5)
 			{
 				reachedDestination = false;
 				var xProportion:Number = diffX / distance;
 				var yProportion:Number = diffY / distance;
-				var vMagnitude:Number = Math.sqrt((vx * vx) + (vy * vy));
+				var vMagnitude:Number = Math.sqrt((_vx * _vx) + (_vy * _vy));
 				
 				if (distance <= _lerpTotalDistance / 2.0)
 				{
 					if (vMagnitude > _LERP_SPEED_)
 					{
-						this.vx -= xProportion * _LERP_SPEED_;
-						this.vy -= yProportion * _LERP_SPEED_;
+						_vx -= xProportion * _LERP_SPEED_;
+						_vy -= yProportion * _LERP_SPEED_;
 					}
 				}
 				else
 				{
-					this.vx += xProportion * _LERP_SPEED_;
-					this.vy += yProportion * _LERP_SPEED_;
+					_vx += xProportion * _LERP_SPEED_;
+					_vy += yProportion * _LERP_SPEED_;
 				}
 			}
 			
 			if (!reachedDestination)
 			{
-				var newVMagnitude:Number = Math.sqrt((vx * vx) + (vy * vy));
-				if (newVMagnitude >= distance)
+				var newVMagnitude:Number = Math.sqrt((_vx * _vx) + (_vy * _vy));
+				if (newVMagnitude >= distance - 0.5)
 					reachedDestination = true;
 			}
 			
-			if (reachedDestination)
+			// If for some reason we stopped before hitting the destination, let's count ourselves done
+			var cameraHasStopped:Boolean = (Math.abs(_vx) < 0.01 && Math.abs(_vy) < 0.01);
+			
+			// Hit destination
+			if (reachedDestination || cameraHasStopped)
 			{
 				_lerping = false;
-				this.x = _lerpDestination.x;
-				this.y = _lerpDestination.y;
-				this.vx = 0;
-				this.vy = 0;
-				this.ax = 0;
-				this.ay = 0;
+				_x = _lerpDestination.x;
+				_y = _lerpDestination.y;
+				_vx = 0;
+				_vy = 0;
+				_ax = 0;
+				_ay = 0;
 			}
 		}
 	}

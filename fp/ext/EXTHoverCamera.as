@@ -42,8 +42,8 @@ package fp.ext
 		public function disableHovering():void
 		{
 			_hovering = false;
-			this.x -= _hoverOffset.x;
-			this.y -= _hoverOffset.y;
+			_x -= _hoverOffset.x;
+			_y -= _hoverOffset.y;
 			_hoverOffset.x = 0;
 			_hoverOffset.y = 0;
 		}
@@ -68,10 +68,10 @@ package fp.ext
 				}
 				else
 				{
-					this.x -= _hoverOffset.x;
-					this.y -= _hoverOffset.y;
-					oldX = this.x;
-					oldY = this.y;
+					_x -= _hoverOffset.x;
+					_y -= _hoverOffset.y;
+					oldX = _x;
+					oldY = _y;
 				}
 			}
 			
@@ -81,8 +81,8 @@ package fp.ext
 			{
 				if (_lerping)
 				{
-					_hoverTarget.x = this.x;
-					_hoverTarget.y = this.y;
+					_hoverTarget.x = _x;
+					_hoverTarget.y = _y;
 					_hoverDistance.x = 0;
 					_hoverDistance.y = 0;
 				}
@@ -145,8 +145,8 @@ package fp.ext
 					
 					_hoverOffset.x += _hoverVelocity.x;
 					_hoverOffset.y += _hoverVelocity.y;
-					this.x += _hoverOffset.x;
-					this.y += _hoverOffset.y;
+					_x += _hoverOffset.x;
+					_y += _hoverOffset.y;
 				}
 			}
 		}
