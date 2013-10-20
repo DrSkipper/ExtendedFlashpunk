@@ -1,6 +1,6 @@
 package fp.ext
 {
-CONFIG::DEBUG
+CONFIG::debug
 {
 	import net.flashpunk.FP;
 	import net.flashpunk.utils.Input;
@@ -14,7 +14,7 @@ CONFIG::DEBUG
 	 */
 	public class EXTConsole
 	{
-CONFIG::DEBUG
+CONFIG::debug
 {
 		public static const CONSOLE_KEY:int = EXTKey.BACKSLASH;
 }
@@ -29,7 +29,7 @@ CONFIG::DEBUG
 		public static function error(filename:String, functionName:String, ...data):void
 		{
 			var errorStringPrefix:String = "ERROR: " + "[" + filename + "." + functionName + "]";
-			CONFIG::DEBUG
+			CONFIG::debug
 				{
 					FP.console.visible = true;
 					FP.console.log(errorStringPrefix, data);
@@ -48,7 +48,7 @@ CONFIG::DEBUG
 		public static function warn(filename:String, functionName:String, ...data):void
 		{
 			var infoStringPrefix:String = "WARN: " + "[" + filename + "." + functionName + "]";
-			CONFIG::DEBUG
+			CONFIG::debug
 				{
 					FP.console.log(infoStringPrefix, data);
 				}
@@ -65,7 +65,7 @@ CONFIG::DEBUG
 		public static function info(filename:String, functionName:String, ...data):void
 		{
 			var infoStringPrefix:String = "INFO: " + "[" + filename + "." + functionName + "]";
-			CONFIG::DEBUG
+			CONFIG::debug
 				{
 					FP.console.log(infoStringPrefix, data);
 				}
@@ -81,7 +81,7 @@ CONFIG::DEBUG
 		 */
 		public static function debug(filename:String, functionName:String, ...data):void
 		{
-			CONFIG::DEBUG
+			CONFIG::debug
 				{
 					var debugStringPrefix:String = "DEBUG: " + "[" + filename + "." + functionName + "]";
 					FP.console.log(debugStringPrefix, data);
@@ -94,14 +94,14 @@ CONFIG::DEBUG
 		 */
 		public static function initializeConsole():void
 		{
-			CONFIG::DEBUG
+			CONFIG::debug
 				{
 					FP.console.enable();
 					EXTConsole.debug("EXTConsole", "initializeConsole()", "EXTConsole Initialized");
 				}
 		}
 		
-CONFIG::DEBUG
+CONFIG::debug
 {
 		/**
 		 * Call in your update loop on debug builds to allow toggling of console visualizer
