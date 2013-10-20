@@ -14,7 +14,23 @@ package fp.ui
 	 */
 	public class UIImageView extends UIView 
 	{
-		public var image:Image;
+		/**
+		 * The image to render in this view
+		 */
+		public function get image():Image 
+		{ 
+			return _image;
+		}
+		public function set image(image:Image):void 
+		{ 
+			_image = image; 
+			this.updateImage(); 
+		}
+		
+		/**
+		 * Set this to render image to a non-default buffer
+		 */
+		//TODO - fcole - Test this
 		public var customBuffer:BitmapData = null;
 		
 		/**
@@ -22,17 +38,31 @@ package fp.ui
 		 * @param	position	The initial position of the View, relative to its parent
 		 * @param	image		The image to render in this view and determine its size
 		 */
-		public function UIImageView(position:Point, image:Image) 
+		public function UIImageView(position:Point, initialImage:Image) 
 		{
-			var size:Point = image != null ? new Point(image.scaledWidth, image.scaledHeight) : EXTUtility.ZERO_POINT;
+			var size:Point = image != null ? 
+							 new Point(initialImage.scaledWidth, initialImage.scaledHeight) :
+						     new Point();
 			super(position, size);
-			
-			this.image = image;
+			_image = initialImage;
+		}
+		
+		/**
+		 * Update the view's size according to the size of the image
+		 */
+		public function updateImage():void
+		{
+			this.size = _image != null ? 
+						new Point(_image.scaledWidth, _image.scaledHeight) :
+						new Point();
 		}
 		
 		/**
 		 * Protected
-		 * 
+		 */
+		protected var _image:Image;
+		
+		/**
 		 * Override UIView's renderContent() to render an image at this location
 		 * @param	absoluteUpperLeft	Screen coordinate to place content at.
 		 * @param	absoluteSize		Bounds to render content within.
