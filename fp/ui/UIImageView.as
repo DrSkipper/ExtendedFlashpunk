@@ -30,7 +30,7 @@ package fp.ui
 		/**
 		 * Set this to render image to a non-default buffer
 		 */
-		//TODO - fcole - Test this
+		//TODO - fcole - Test this, also probably move to view controller level
 		public var customBuffer:BitmapData = null;
 		
 		/**
@@ -40,7 +40,7 @@ package fp.ui
 		 */
 		public function UIImageView(position:Point, initialImage:Image) 
 		{
-			var size:Point = image != null ? 
+			var size:Point = initialImage != null ? 
 							 new Point(initialImage.scaledWidth, initialImage.scaledHeight) :
 						     new Point();
 			super(position, size);
@@ -72,10 +72,11 @@ package fp.ui
 		{
 			super.renderContent(absoluteUpperLeft, absoluteSize, scale);
 			
-			var oldScale:Number = image.scale;
-			image.scale *= scale;
-			image.render(customBuffer != null ? customBuffer : FP.buffer, absoluteUpperLeft, EXTUtility.ZERO_POINT);
-			image.scale = oldScale;
+			var oldScale:Number = _image.scale;
+			_image.scale *= scale;
+			_image.render(customBuffer != null ? customBuffer : FP.buffer, 
+							absoluteUpperLeft, EXTUtility.ZERO_POINT);
+			_image.scale = oldScale;
 		}
 	}
 }

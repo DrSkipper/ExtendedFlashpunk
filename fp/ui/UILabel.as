@@ -1,7 +1,10 @@
 package fp.ui 
 {
+	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import net.flashpunk.graphics.Text;
+	import net.flashpunk.FP;
+	import fp.ext.EXTUtility;
 	
 	/**
 	 * UILabel
@@ -24,13 +27,19 @@ package fp.ui
 		}
 		
 		/**
+		 * Set this to render image to a non-default buffer
+		 */
+		//TODO - fcole - Test this, also probably move to view controller level
+		public var customBuffer:BitmapData = null;
+		
+		/**
 		 * Constructor
 		 * @param	postition	The initial position of the View, relative to its parent
 		 * @param	initialText	The text to display in this view and determine its size
 		 */
-		public function UILabel(postition:Point, initialText:Text) 
+		public function UILabel(position:Point, initialText:Text) 
 		{
-			var size:Point = text != null ? 
+			var size:Point = initialText != null ? 
 							 new Point(initialText.scaledWidth, initialText.scaledHeight) :
 							 new Point();
 			super(position, size);
@@ -51,5 +60,22 @@ package fp.ui
 		 * Protected
 		 */
 		protected var _text:Text;
+		
+		/**
+		 * Override UIView's renderContent() to render text at this location
+		 * @param	absoluteUpperLeft	Screen coordinate to place content at.
+		 * @param	absoluteSize		Bounds to render content within.
+		 * @param	scale				Zoom level, for scaling images to match.
+		 */
+		override protected function renderContent(absoluteUpperLeft:Point, absoluteSize:Point, scale:Number):void
+		{
+			super.renderContent(absoluteUpperLeft, absoluteSize, scale);
+			
+			var oldScale:Number = _text.scale;
+			_text.scale *= scale;
+			_text.render(customBuffer != null ? customBuffer : FP.buffer, 
+							absoluteUpperLeft, EXTUtility.ZERO_POINT);
+			_text.scale = oldScale;
+		}
 	}
 }
