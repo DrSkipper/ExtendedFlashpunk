@@ -1,0 +1,3 @@
+[submodule "FlashPunk"]
+	path = FlashPunk
+	url = https://github.com/Draknek/FlashPunk.git
