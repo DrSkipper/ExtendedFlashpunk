@@ -3,7 +3,9 @@ package net.extendedpunk.ui
 	import flash.geom.Point;
 	import net.flashpunk.graphics.Image;
 	import net.flashpunk.graphics.Text;
+	import net.flashpunk.utils.Input;
 	import net.extendedpunk.ext.EXTUtility;
+	import net.extendedpunk.ext.EXTOffsetType;
 	import net.extendedpunk.ui.UIImageView;
 
 	/**
@@ -41,7 +43,6 @@ package net.extendedpunk.ui
 		
 		/**
 		 * selectedImage : Image displayed when button is enabled and in the selected state.
-		 *    NOTE - The button is deemed "selectable" if selectedImage is not null.
 		 */
 		public function get selectedImage():Image { return _selectedImage }
 		public function set selectedImage(i:Image):void { _selectedImage = i; updateImageSize(i); }
@@ -49,9 +50,16 @@ package net.extendedpunk.ui
 		/**
 		 * Direct access to helpful subviews
 		 */
-		public var imageView:UIImageView; // Used if smartStretchImage is false
-		public var smartStretchView:UISmartImageStretchView; // Used if smartStretchImage is true
-		public var label:UILabel;
+		public var imageView:UIImageView = null;
+		public var label:UILabel = null;
+		
+		/**
+		 * States and transitions
+		 */
+		public var enabled:Boolean = true;
+		public var selected:Boolean = false;
+		public var selectable:Boolean = false;
+		public var unselectIfClickedWhileSelected:Boolean = true;
 		
 		/**
 		 * Constructor
@@ -81,6 +89,57 @@ package net.extendedpunk.ui
 		}
 		
 		/**
+		 * Override UIView's update to check for user interaction
+		 */
+		override public function update():void
+		{
+			super.update();
+			
+			if (this.enabled)
+			{
+				if (_mouseIsOverButton)
+				{
+					if (Input.mousePressed)
+					{
+						//TODO - fcole - Send callback
+						
+						if (this.selectable)
+						{
+							if (!this.selected)
+								this.selected = true;
+							else if (this.unselectIfClickedWhileSelected)
+								this.selected = false;
+						}
+					}
+					
+					if (Input.mouseDown)
+					{
+						this.switchToImage(_pressedImage);
+					}
+					else
+					{
+						//TODO - fcole - Allow separate hovering image when selected?
+						if (!this.selected || !this.selectable)
+							this.switchToImage(_hoveringImage);
+						else
+							this.switchToImage(_selectedImage);
+					}
+				}
+				else
+				{
+					if (this.selected)
+						this.switchToImage(_selectedImage);
+					else
+						this.switchToImage(_enabledImage);
+				}
+			}
+			else
+			{
+				this.switchToImage(_disabledImage);
+			}
+		}
+		
+		/**
 		 * Protected
 		 */
 		protected var _enabledImage:Image = null;
@@ -89,6 +148,18 @@ package net.extendedpunk.ui
 		protected var _pressedImage:Image = null;
 		protected var _selectedImage:Image = null;
 		
+		protected var _mouseIsOverButton:Boolean = false;
+		
+		/**
+		 * Override renderContent() so we can check if the mouse is within our absolute bounds
+		 */
+		//TODO - fcole - This shouldn't really be done during the render phase, should the UI
+		//    update tree also contain absolute position information?
+		override protected function renderContent(absoluteUpperLeft:Point, absoluteSize:Point, scale:Number):void
+		{
+			_mouseIsOverButton = EXTUtility.PointIsInsideContainer(new Point(Input.mouseX, Input.mouseY), absoluteUpperLeft, absoluteSize, EXTOffsetType.TOP_LEFT);
+		}
+		
 		protected function updateImageSize(image:Image):void
 		{
 			if (image != null)
@@ -96,6 +167,12 @@ package net.extendedpunk.ui
 				image.scaledWidth = this.size.x;
 				image.scaledHeight = this.size.y;
 			}
+		}
+		
+		protected function switchToImage(image:Image):void
+		{
+			if (image != null && imageView.image != image)
+				imageView.image = image;
 		}
 		
 //	http://active.tutsplus.com/tutorials/games/an-introduction-to-flashpunk-the-basics/

@@ -160,5 +160,23 @@ package net.extendedpunk.ext
 			returnValue.y += absolutePoint.y;
 			return returnValue;
 		}
+		
+		/**
+		 * Detect whether a given point lies inside a container
+		 * @param	point						Point to check
+		 * @param	containerPosition			Position of the container
+		 * @param	containerSize				Size of the container
+		 * @param	containerPositionOffsetType	Where the container's position is measured from
+		 * @return	True if th point lies within container, false otherwise
+		 */
+		public static function PointIsInsideContainer(point:Point, containerPosition:Point, containerSize:Point, containerPositionOffsetType:EXTOffsetType):Boolean
+		{
+			var upperLeftOfContainer:Point = EXTUtility.UpperLeftifyCoordinate(containerPosition, containerSize, containerPositionOffsetType);
+			
+			return point.x >= upperLeftOfContainer.x && 
+				   point.x <= upperLeftOfContainer.x + containerSize.x &&
+				   point.y >= upperLeftOfContainer.y &&
+				   point.y <= upperLeftOfContainer.y + containerSize.y;
+		}
 	}
 }
