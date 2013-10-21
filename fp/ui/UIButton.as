@@ -1,8 +1,10 @@
 package fp.ui
 {
-	import net.flashpunk.graphics.Spritemap;
+	import flash.geom.Point;
+	import net.flashpunk.graphics.Image;
 	import net.flashpunk.graphics.Text;
-	import net.flashpunk.utils.Input;
+	import fp.ext.EXTUtility;
+	import fp.ui.UIImageView;
 
 	//TODO - fcole - THIS CLASS IS NO WHERE NEAR COMPLETE
 //	http://active.tutsplus.com/tutorials/games/an-introduction-to-flashpunk-the-basics/
@@ -10,6 +12,27 @@ package fp.ui
 	{
 		public var imageView:UIImageView;
 		public var label:UILabel;
+		
+		public var enabledImage:Image = null;
+		public var disabledImage:Image = null;
+		public var hoveringImage:Image = null;
+		public var pressedImage:Image = null;
+		public var selectedImage:Image = null;
+		
+		public function UIButton(position:Point, size:Point, baseImage:Image, initialText:Text)
+		{
+			super(position, size);
+			
+			enabledImage = baseImage;
+			if (baseImage != null)
+			{
+				baseImage.scaledWidth = size.x;
+				baseImage.scaledHeight = size.y;
+			}
+			
+			imageView = new UIImageView(EXTUtility.ZERO_POINT, enabledImage);
+			label = new UILabel(EXTUtility.ZERO_POINT, initialText);
+		}
 		
 		//protected var _map:Spritemap;
 		//protected var _over:Boolean;
