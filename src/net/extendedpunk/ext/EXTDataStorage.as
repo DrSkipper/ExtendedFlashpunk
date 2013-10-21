@@ -1,4 +1,4 @@
-package fp.ext
+package net.extendedpunk.ext
 {
 	import flash.events.NetStatusEvent;
 	import flash.net.SharedObject;

@@ -1,4 +1,4 @@
-package fp.ext
+package net.extendedpunk.ext
 {
 	import flash.geom.Point;
 	import net.flashpunk.World;

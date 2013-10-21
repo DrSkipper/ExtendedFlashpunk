@@ -1,12 +1,12 @@
-package fp.ui
+package net.extendedpunk.ui
 {
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import net.flashpunk.graphics.Canvas;
 	import net.flashpunk.FP;
-	import fp.ext.EXTOffsetType;
-	import fp.ext.EXTUtility;
-	import fp.ext.EXTColor
+	import net.extendedpunk.ext.EXTOffsetType;
+	import net.extendedpunk.ext.EXTUtility;
+	import net.extendedpunk.ext.EXTColor
 	
 	/**
 	 * UIView

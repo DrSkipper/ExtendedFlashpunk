@@ -1,10 +1,10 @@
-package fp.ui 
+package net.extendedpunk.ui 
 {
 	import flash.geom.Point;
-	import fp.ext.EXTUtility;
-	import fp.ext.EXTCamera;
-	import fp.ui.UIView;
-	import fp.ext.EXTConsole;
+	import net.extendedpunk.ext.EXTUtility;
+	import net.extendedpunk.ext.EXTCamera;
+	import net.extendedpunk.ui.UIView;
+	import net.extendedpunk.ext.EXTConsole;
 	
 	/**
 	 * UIViewController

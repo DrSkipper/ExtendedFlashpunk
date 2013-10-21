@@ -1,6 +1,6 @@
-package fp.ext
+package net.extendedpunk.ext
 {
-	import fp.ext.EXTUtility;
+	import net.extendedpunk.ext.EXTUtility;
 	
 	// An "Enumeration" which specifies where offsets 
 	//   should be measured from.

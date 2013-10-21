@@ -1,10 +1,10 @@
-package fp.ui
+package net.extendedpunk.ui
 {
 	import flash.geom.Point;
 	import net.flashpunk.graphics.Image;
 	import net.flashpunk.graphics.Text;
-	import fp.ext.EXTUtility;
-	import fp.ui.UIImageView;
+	import net.extendedpunk.ext.EXTUtility;
+	import net.extendedpunk.ui.UIImageView;
 
 	//TODO - fcole - THIS CLASS IS NO WHERE NEAR COMPLETE
 //	http://active.tutsplus.com/tutorials/games/an-introduction-to-flashpunk-the-basics/

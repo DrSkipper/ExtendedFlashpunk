@@ -1,10 +1,10 @@
-package fp.ext
+package net.extendedpunk.ext
 {
 	import flash.geom.Point;
 	import net.flashpunk.FP;
-	import fp.ext.EXTConsole;
-	import fp.ext.EXTOffsetType;
-	import fp.ext.EXTUtility;
+	import net.extendedpunk.ext.EXTConsole;
+	import net.extendedpunk.ext.EXTOffsetType;
+	import net.extendedpunk.ext.EXTUtility;
 
 	/**
 	 * Extended Camera

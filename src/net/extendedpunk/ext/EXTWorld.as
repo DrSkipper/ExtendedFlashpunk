@@ -1,4 +1,4 @@
-package fp.ext
+package net.extendedpunk.ext
 {
 	import flash.geom.Point;
 	import net.flashpunk.Entity;
@@ -6,7 +6,7 @@ package fp.ext
 	import net.flashpunk.graphics.Image;
 	import net.flashpunk.World;
 	import net.flashpunk.FP;
-	import fp.ui.UIViewController;
+	import net.extendedpunk.ui.UIViewController;
 	
 	/**
 	 * Extended World
