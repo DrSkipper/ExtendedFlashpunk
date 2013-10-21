@@ -9,7 +9,7 @@ package net.extendedpunk.ui
 	/**
 	 * UILabel
 	 * A subclass of UIView which displays text within its bounds.
-	 * Created by Fletcher, 10/19/2013
+	 * Created by Fletcher, 10/19/13
 	 */
 	public class UILabel extends UIView 
 	{

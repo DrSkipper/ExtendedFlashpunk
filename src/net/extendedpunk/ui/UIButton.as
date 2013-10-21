@@ -6,34 +6,99 @@ package net.extendedpunk.ui
 	import net.extendedpunk.ext.EXTUtility;
 	import net.extendedpunk.ui.UIImageView;
 
-	//TODO - fcole - THIS CLASS IS NO WHERE NEAR COMPLETE
-//	http://active.tutsplus.com/tutorials/games/an-introduction-to-flashpunk-the-basics/
+	/**
+	 * UIButton
+	 * A subclass of UIView which registers clicks, invokes callbacks when clicked,
+	 *    and handles a visual clickable representation.
+	 * Created by Fletcher, 10/20/13
+	 */
 	public class UIButton extends UIView
 	{
-		public var imageView:UIImageView;
+		/**
+		 * enabledImage : Image to be displayed when button is enabled for interaction and
+		 *   not being interacted with. Is also used for other states as a default.
+		 */
+		public function get enabledImage():Image { return _enabledImage; }
+		public function set enabledImage(i:Image):void { _enabledImage = i; updateImageSize(i) }
+		
+		/**
+		 * disabledImage : Image displayed when this button is not enabled for interaction
+		 */
+		public function get disabledImage():Image { return _disabledImage }
+		public function set disabledImage(i:Image):void { _disabledImage = i; updateImageSize(i); }
+		
+		/**
+		 * hoveringImage : Image displayed when button is enabled and mouse is hovering above it
+		 */
+		public function get hoveringImage():Image { return _hoveringImage }
+		public function set hoveringImage(i:Image):void { _hoveringImage = i; updateImageSize(i); }
+		
+		/**
+		 * pressedImage : Image displayed when button is enabled and mouse is holding down on it
+		 */
+		public function get pressedImage():Image { return _pressedImage }
+		public function set pressedImage(i:Image):void { _pressedImage = i; updateImageSize(i); }
+		
+		/**
+		 * selectedImage : Image displayed when button is enabled and in the selected state.
+		 *    NOTE - The button is deemed "selectable" if selectedImage is not null.
+		 */
+		public function get selectedImage():Image { return _selectedImage }
+		public function set selectedImage(i:Image):void { _selectedImage = i; updateImageSize(i); }
+		
+		/**
+		 * Direct access to helpful subviews
+		 */
+		public var imageView:UIImageView; // Used if smartStretchImage is false
+		public var smartStretchView:UISmartImageStretchView; // Used if smartStretchImage is true
 		public var label:UILabel;
 		
-		public var enabledImage:Image = null;
-		public var disabledImage:Image = null;
-		public var hoveringImage:Image = null;
-		public var pressedImage:Image = null;
-		public var selectedImage:Image = null;
-		
+		/**
+		 * Constructor
+		 * @param	position	The initial position of the View, relative to its parent
+		 * @param	size		The initial size of the View. If null, will use baseImage's size
+		 * @param	baseImage	enabledImage's initial value, and default image for other states
+		 * @param	initialText	Text to display within the button
+		 */
 		public function UIButton(position:Point, size:Point, baseImage:Image, initialText:Text)
 		{
+			if (size == null && baseImage != null)
+				size = new Point(baseImage.width, baseImage.height);
+			
 			super(position, size);
 			
-			enabledImage = baseImage;
 			if (baseImage != null)
 			{
+				_enabledImage = baseImage;
 				baseImage.scaledWidth = size.x;
 				baseImage.scaledHeight = size.y;
 			}
 			
-			imageView = new UIImageView(EXTUtility.ZERO_POINT, enabledImage);
+			imageView = new UIImageView(EXTUtility.ZERO_POINT, _enabledImage);
 			label = new UILabel(EXTUtility.ZERO_POINT, initialText);
+			this.addSubview(imageView);
+			this.addSubview(label);
 		}
 		
+		/**
+		 * Protected
+		 */
+		protected var _enabledImage:Image = null;
+		protected var _disabledImage:Image = null;
+		protected var _hoveringImage:Image = null;
+		protected var _pressedImage:Image = null;
+		protected var _selectedImage:Image = null;
+		
+		protected function updateImageSize(image:Image):void
+		{
+			if (image != null)
+			{
+				image.scaledWidth = this.size.x;
+				image.scaledHeight = this.size.y;
+			}
+		}
+		
+//	http://active.tutsplus.com/tutorials/games/an-introduction-to-flashpunk-the-basics/
 		//protected var _map:Spritemap;
 		//protected var _over:Boolean;
 		//protected var _clicked:Boolean;
