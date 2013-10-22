@@ -63,17 +63,23 @@ package net.extendedpunk.ui
 		
 		/**
 		 * Constructor
-		 * @param	position	The initial position of the View, relative to its parent
-		 * @param	size		The initial size of the View. If null, will use baseImage's size
-		 * @param	baseImage	enabledImage's initial value, and default image for other states
-		 * @param	initialText	Text to display within the button
+		 * @param	position		 The initial position of the View, relative to its parent
+		 * @param	size			 The initial size of the View. If null, will use baseImage's size
+		 * @param	baseImage		 enabledImage's initial value, and default image for other states
+		 * @param	initialText		 Text to display within the button
+		 * @param	callback		 Function to call when this button is clicked
+		 * @param	callbackArgument Argument to pass to callback function, if necessary
 		 */
-		public function UIButton(position:Point, size:Point, baseImage:Image, initialText:Text)
+		public function UIButton(position:Point, size:Point, baseImage:Image, initialText:Text, 
+								 callback:Function, callbackArgument:*)
 		{
 			if (size == null && baseImage != null)
 				size = new Point(baseImage.width, baseImage.height);
 			
 			super(position, size);
+			
+			_callback = callback;
+			_argument = callbackArgument;
 			
 			if (baseImage != null)
 			{
@@ -97,11 +103,13 @@ package net.extendedpunk.ui
 			
 			if (this.enabled)
 			{
+				var needsToSendCallback:Boolean = false;
+				
 				if (_mouseIsOverButton)
 				{
 					if (Input.mousePressed)
 					{
-						//TODO - fcole - Send callback
+						needsToSendCallback = true;
 						
 						if (this.selectable)
 						{
@@ -132,6 +140,9 @@ package net.extendedpunk.ui
 					else
 						this.switchToImage(_enabledImage);
 				}
+				
+				if (needsToSendCallback)
+					this.invokeCallback();
 			}
 			else
 			{
@@ -149,6 +160,8 @@ package net.extendedpunk.ui
 		protected var _selectedImage:Image = null;
 		
 		protected var _mouseIsOverButton:Boolean = false;
+		protected var _callback:Function;
+		protected var _argument:*;
 		
 		/**
 		 * Override renderContent() so we can check if the mouse is within our absolute bounds
@@ -175,116 +188,15 @@ package net.extendedpunk.ui
 				imageView.image = image;
 		}
 		
-//	http://active.tutsplus.com/tutorials/games/an-introduction-to-flashpunk-the-basics/
-		//protected var _map:Spritemap;
-		//protected var _over:Boolean;
-		//protected var _clicked:Boolean;
-		//protected var _callback:Function;
-		//protected var _argument:*;
-		//protected var _label:Text = null;
-		//
-		//public function UIButton(callback:Function, argument:*, x:Number = 0, y:Number = 0)
-		//{
-			//super(x, y);
-			//this.centerOrigin();
-			//
-			//_callback = callback;
-			//_argument = argument;
-		//}
-		//
-		//
-		//public function setSpritemap(asset:*, frameW:uint, frameH:uint, text:String = null):void
-		//{
-			//this._map = new Spritemap(asset, frameW, frameH);
-			//
-			//this._map.add("Up",   [2]);
-			//this._map.add("Over", [1]);
-			//this._map.add("Down", [0]);
-			//
-//			graphic = _map;
-			//this._map.centerOrigin();
-			//this.addGraphic(_map);
-			//this.setHitbox(frameW, frameH);
-			//this.layer = -2;
-			//
-			//if (text != null)
-			//{
-				//this._label = new Text(text, 0, 0);
-				//this._label.centerOO();
-				//this.addGraphic(this._label);
-			//}
-		//}
-		//
-		//override public function update():void
-		//{
-			//if (!world)
-			//{
-				//return;
-			//}
-			//
-			//if (this._label != null)
-				//this._label.update();
-			//
-			//_over = false;
-			//_clicked = false;
-			//
-			//if (collidePoint(x - world.camera.x, y - world.camera.y, Input.mouseX, Input.mouseY))
-			//{
-				//if (Input.mouseReleased)
-				//{
-					//clicked();
-				//}
-				//else if (Input.mouseDown)
-				//{
-					//mouseDown();
-				//}
-				//else
-				//{
-					//mouseOver();
-				//}
-			//}
-		//}
-		//
-		//protected function clicked():void
-		//{
-			//if (!_argument)
-			//{
-				//_callback();
-			//}
-			//else
-			//{
-				//_callback(_argument);
-			//}
-		//}
-		//
-		//protected function mouseOver():void
-		//{
-			//_over = true;
-		//}
-		//
-		//protected function mouseDown():void
-		//{
-			//_clicked = true;
-		//}
-		//
-		//override public function render():void
-		//{
-			//if (_clicked)
-			//{
-				//_map.play("Down");
-			//}
-			//else if (_over)
-			//{
-				//_map.play("Over");
-			//}
-			//else
-			//{
-				//_map.play("Up");
-			//}
-			//
-			//super.render();
-		//}
-		
+		protected function invokeCallback():void
+		{
+			if (_callback != null)
+			{
+				if (_argument != null)
+					_callback(_argument);
+				else
+					_callback();
+			}
+		}
 	}
-	
 }
