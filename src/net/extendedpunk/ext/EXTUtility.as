@@ -167,7 +167,7 @@ package net.extendedpunk.ext
 		 * @param	containerPosition			Position of the container
 		 * @param	containerSize				Size of the container
 		 * @param	containerPositionOffsetType	Where the container's position is measured from
-		 * @return	True if th point lies within container, false otherwise
+		 * @return	True if the point lies within container, false otherwise
 		 */
 		public static function PointIsInsideContainer(point:Point, containerPosition:Point, containerSize:Point, containerPositionOffsetType:EXTOffsetType):Boolean
 		{
