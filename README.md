@@ -14,7 +14,7 @@ Features
 
 Requirements
 -----------------
-This project extends and heavily utilizes much of the [Flashpunk](http://useflashpunk.net/) engine, which must be downloaded separately.
+This project extends and heavily utilizes much of the [Flashpunk](http://useflashpunk.net/) engine, which is included as a submodule in this repository, but must be manually added to the classpaths/sourcepaths of your project. Alternatively, you can link your own version of Flashpunk in your classpaths/sourcepaths.
 
 More Info
 -----------------
