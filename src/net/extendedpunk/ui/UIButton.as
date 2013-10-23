@@ -185,9 +185,12 @@ package net.extendedpunk.ui
 		protected var _selectedImage:Image = null;
 		protected var _selectedHoveringImage:Image = null;
 		
-		protected var _mouseIsOverButton:Boolean = false;
 		protected var _callback:Function;
 		protected var _argument:*;
+		
+		//TODO - fcole - Move to UIView level, and views should have a public
+		//               function for accessing if this value is true for any subview(s).
+		protected var _mouseIsOverButton:Boolean = false;
 		
 		/**
 		 * Override renderContent() so we can check if the mouse is within our absolute bounds

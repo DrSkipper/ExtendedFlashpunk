@@ -72,11 +72,14 @@ package net.extendedpunk.ui
 		{
 			super.renderContent(absoluteUpperLeft, absoluteSize, scale);
 			
-			var oldScale:Number = _image.scale;
-			_image.scale *= scale;
-			_image.render(customBuffer != null ? customBuffer : FP.buffer, 
-							absoluteUpperLeft, EXTUtility.ZERO_POINT);
-			_image.scale = oldScale;
+			if (_image != null)
+			{
+				var oldScale:Number = _image.scale;
+				_image.scale *= scale;
+				_image.render(customBuffer != null ? customBuffer : FP.buffer, 
+								absoluteUpperLeft, EXTUtility.ZERO_POINT);
+				_image.scale = oldScale;
+			}
 		}
 	}
 }
