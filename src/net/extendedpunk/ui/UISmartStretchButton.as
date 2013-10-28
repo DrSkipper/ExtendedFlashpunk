@@ -2,6 +2,7 @@ package net.extendedpunk.ui
 {
 	import flash.geom.Point;
 	import net.flashpunk.graphics.Text;
+	import net.extendedpunk.ext.EXTUtility;
 	
 	/**
 	 * UISmartStretchButton
@@ -51,30 +52,30 @@ package net.extendedpunk.ui
 											 callback:Function = null, 
 											 callbackArgument:* = null) 
 		{
-			this.enabledView = new UISmartImageStretchView(position, size, enabledImageSource);
+			this.enabledView = new UISmartImageStretchView(EXTUtility.ZERO_POINT, size, enabledImageSource);
 			
 			if (disabledImageSource != null)
-				this.disabledView = new UISmartImageStretchView(position, size, disabledImageSource);
+				this.disabledView = new UISmartImageStretchView(EXTUtility.ZERO_POINT, size, disabledImageSource);
 			else
 				this.disabledView = this.enabledView;
 			
 			if (hoveringImageSource != null)
-				this.hoveringView = new UISmartImageStretchView(position, size, hoveringImageSource);
+				this.hoveringView = new UISmartImageStretchView(EXTUtility.ZERO_POINT, size, hoveringImageSource);
 			else
 				this.hoveringView = this.enabledView;
 			
 			if (pressedImageSource != null)
-				this.pressedView = new UISmartImageStretchView(position, size, pressedImageSource);
+				this.pressedView = new UISmartImageStretchView(EXTUtility.ZERO_POINT, size, pressedImageSource);
 			else
 				this.pressedView = this.enabledView;
 			
 			if (selectedImageSource != null)
-				this.selectedView = new UISmartImageStretchView(position, size, selectedImageSource);
+				this.selectedView = new UISmartImageStretchView(EXTUtility.ZERO_POINT, size, selectedImageSource);
 			else
 				this.selectedView = this.enabledView;
 			
 			if (selectedHoveringImageSource != null)
-				this.selectedHoveringView = new UISmartImageStretchView(position, size, selectedHoveringImageSource);
+				this.selectedHoveringView = new UISmartImageStretchView(EXTUtility.ZERO_POINT, size, selectedHoveringImageSource);
 			else
 				this.selectedHoveringView = this.selectedView;
 			
