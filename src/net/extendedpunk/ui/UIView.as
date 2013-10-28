@@ -2,11 +2,13 @@ package net.extendedpunk.ui
 {
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	
 	import net.extendedpunk.ext.EXTColor;
 	import net.extendedpunk.ext.EXTOffsetType;
 	import net.extendedpunk.ext.EXTUtility;
 	import net.flashpunk.FP;
 	import net.flashpunk.graphics.Canvas;
+	import net.flashpunk.utils.Input;
 	
 	/**
 	 * UIView
@@ -172,8 +174,13 @@ package net.extendedpunk.ui
 		protected var _backgroundColorRectangle:Rectangle = null;
 		
 		/**
+		 * Whether the mouse is currently over the absolute location of this view
+		 */
+		protected var _mouseIsOverView:Boolean = false;
+		
+		/**
 		 * Logic to render any content specific to a given UIView subclass. Even still,
-		 *    should usually only be overridden by UIImageView and UILabelView.
+		 *    should usually only be overridden by UIImageView and UILabel.
 		 * @param	absoluteUpperLeft	Screen coordinate to place content at.
 		 * @param	absoluteSize		Bounds to render content within.
 		 * @param	scale				Zoom level, for scaling images to match.
@@ -194,7 +201,11 @@ package net.extendedpunk.ui
 				_backgroundColorCanvas.render(FP.buffer, absoluteUpperLeft, EXTUtility.ZERO_POINT);
 			}
 			
-			// Overridden in UIImageView and UILabelView
+			//TODO - fcole - This possibly shouldn't be done during the render phase, should the UI
+			//    update tree also contain absolute position information?
+			_mouseIsOverView = EXTUtility.PointIsInsideContainer(new Point(Input.mouseX, Input.mouseY), absoluteUpperLeft, absoluteSize, EXTOffsetType.TOP_LEFT);
+			
+			// Overridden in UIImageView and UILabel
 		}
 	}
 }

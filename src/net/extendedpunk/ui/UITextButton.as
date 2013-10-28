@@ -1,7 +1,6 @@
 package net.extendedpunk.ui
 {
 	import flash.geom.Point;
-	import net.extendedpunk.ext.EXTOffsetType;
 	import net.extendedpunk.ext.EXTUtility;
 	import net.flashpunk.graphics.Text;
 	import net.flashpunk.utils.Input;
@@ -72,7 +71,7 @@ package net.extendedpunk.ui
 			{
 				var needsToSendCallback:Boolean = false;
 				
-				if (_mouseIsOverButton)
+				if (_mouseIsOverView)
 				{
 					if (Input.mousePressed)
 					{
@@ -131,20 +130,6 @@ package net.extendedpunk.ui
 		
 		protected var _callback:Function;
 		protected var _argument:*;
-		
-		//TODO - fcole - Move to UIView level, and views should have a public
-		//               function for accessing if this value is true for any subview(s).
-		protected var _mouseIsOverButton:Boolean = false;
-		
-		/**
-		 * Override renderContent() so we can check if the mouse is within our absolute bounds
-		 */
-		//TODO - fcole - This shouldn't really be done during the render phase, should the UI
-		//    update tree also contain absolute position information?
-		override protected function renderContent(absoluteUpperLeft:Point, absoluteSize:Point, scale:Number):void
-		{
-			_mouseIsOverButton = EXTUtility.PointIsInsideContainer(new Point(Input.mouseX, Input.mouseY), absoluteUpperLeft, absoluteSize, EXTOffsetType.TOP_LEFT);
-		}
 		
 		/**
 		 * Logic to execute when switching to the given button state
@@ -208,14 +193,14 @@ package net.extendedpunk.ui
 				{
 					if (shouldBeOn)
 					{
-						if (!_mouseIsOverButton)
+						if (!_mouseIsOverView)
 							switchToState(SELECTED_STATE);
 						else
 							switchToState(SELECTED_HOVERING_STATE);
 					}
 					else
 					{
-						if (!_mouseIsOverButton)
+						if (!_mouseIsOverView)
 							switchToState(ENABLED_STATE);
 						else
 							switchToState(HOVERING_STATE);
