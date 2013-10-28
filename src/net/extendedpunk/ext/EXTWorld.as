@@ -12,6 +12,7 @@ package net.extendedpunk.ext
 	 * Extended World
 	 * Subclass of Flashpunk's World which now contains references
 	 * to a fully functional camera and root UI objects.
+	 * Created by Fletcher, 8/25/13
 	 */
 	public class EXTWorld extends World
 	{

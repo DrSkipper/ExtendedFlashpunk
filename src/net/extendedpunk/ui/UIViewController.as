@@ -1,10 +1,9 @@
 package net.extendedpunk.ui 
 {
 	import flash.geom.Point;
-	import net.extendedpunk.ext.EXTUtility;
 	import net.extendedpunk.ext.EXTCamera;
+	import net.extendedpunk.ext.EXTUtility;
 	import net.extendedpunk.ui.UIView;
-	import net.extendedpunk.ext.EXTConsole;
 	
 	/**
 	 * UIViewController
@@ -25,12 +24,13 @@ package net.extendedpunk.ui
 		 *    but a camera to draw relative to may be specified if there is a 
 		 *    desire to have UIViews located in the game word. The bounds of a 
 		 *    view controller are usually equal to the size of the screen.
-		 * @param	bounds		Size of the root view of this view controller.
+		 * @param	bounds		Size of the view area of this view controller.
 		 * @param	camera		[Optional] Camera to measure relative positions to.
 		 */
 		public function UIViewController(bounds:Point, camera:EXTCamera = null) 
 		{
-			rootView = new UIView(EXTUtility.ZERO_POINT, bounds);
+			rootView = new UIView(EXTUtility.ZERO_POINT, EXTUtility.ZERO_POINT);
+			_bounds = bounds;
 			_camera = camera;
 		}
 		
@@ -48,7 +48,7 @@ package net.extendedpunk.ui
 		public function render():void
 		{
 			var offsetPosition:Point = EXTUtility.ZERO_POINT;
-			var bounds:Point = new Point(rootView.size.x, rootView.size.y);
+			var bounds:Point = new Point(_bounds.x, _bounds.y);
 			var scale:Number = 1.0;
 			
 			if (_camera != null)
@@ -65,6 +65,7 @@ package net.extendedpunk.ui
 		/**
 		 * Protected
 		 */
+		protected var _bounds:Point = null;
 		protected var _camera:EXTCamera = null;
 	}
 }

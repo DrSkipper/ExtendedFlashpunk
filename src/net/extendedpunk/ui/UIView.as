@@ -44,6 +44,25 @@ package net.extendedpunk.ui
 		}
 		
 		/**
+		 * Accessor for detecting if the mouse is currently hovering over
+		 * this View or any of its subviews
+		 */
+		public function get mouseIsOverViewOrSubviews():Boolean
+		{
+			if (_mouseIsOverView)
+				return true;
+			if (_subviews != null)
+			{
+				for each (var view:UIView in _subviews)
+				{
+					if (view.mouseIsOverViewOrSubviews)
+						return true;
+				}
+			}
+			return false
+		}
+		
+		/**
 		 * Constructor. Set up initial transforms.
 		 * Use these parameters in conjunction with offset types above to determine layout.
 		 * @param	position	The initial position of the View, relative to its parent
