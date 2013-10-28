@@ -1,6 +1,7 @@
 package net.extendedpunk.ui 
 {
 	import flash.geom.Point;
+	import net.flashpunk.graphics.Text;
 	
 	/**
 	 * UISmartStretchButton
@@ -9,7 +10,7 @@ package net.extendedpunk.ui
 	 * base image without artifacts around the sides.
 	 * Created by Fletcher, 10/22/13
 	 */
-	public class UISmartStretchButton extends UIView 
+	public class UISmartStretchButton extends UITextButton
 	{
 		/**
 		 * Direct access to specific subviews
@@ -20,17 +21,6 @@ package net.extendedpunk.ui
 		public var pressedView:UISmartImageStretchView = null;
 		public var selectedView:UISmartImageStretchView = null;
 		public var selectedHoveringView:UISmartImageStretchView = null;
-		
-		/**
-		 * Text to be displayed for each state. Null properties will default to enabledText,
-		 * except selectedHoveringText, which will default to selectedText.
-		 */
-		public var enabledText:Text = null;
-		public var disabledText:Text = null;
-		public var hoveringText:Text = null;
-		public var pressedText:Text = null;
-		public var selectedText:Text = null;
-		public var selectedHoveringText:Text = null;
 		
 		/**
 		 * Constructor
@@ -46,6 +36,9 @@ package net.extendedpunk.ui
 		 * @param	pressedImageSource			Source for pressed state Image
 		 * @param	selectedImageSource			Source for selected state Image
 		 * @param	selectedHoveringImageSource	Source for selected hovering state Image
+		 * @param	initialText		 Text to display within the button. Initializes enabledText.
+		 * @param	callback		 Function to call when this button is clicked
+		 * @param	callbackArgument Argument to pass to callback function, if necessary
 		 */
 		public function UISmartStretchButton(position:Point, size:Point, 
 											 enabledImageSource:*, 
@@ -53,7 +46,10 @@ package net.extendedpunk.ui
 											 hoveringImageSource:* = null,
 											 pressedImageSource:* = null,
 											 selectedImageSource:* = null,
-											 selectedHoveringImageSource:* = null) 
+											 selectedHoveringImageSource:* = null,
+											 initialText:Text = null,
+											 callback:Function = null, 
+											 callbackArgument:* = null) 
 		{
 			this.enabledView = new UISmartImageStretchView(position, size, enabledImageSource);
 			
@@ -75,19 +71,57 @@ package net.extendedpunk.ui
 			if (selectedImageSource != null)
 				this.selectedView = new UISmartImageStretchView(position, size, selectedImageSource);
 			else
-				this.selectecView = this.enabledView;
+				this.selectedView = this.enabledView;
 			
 			if (selectedHoveringImageSource != null)
 				this.selectedHoveringView = new UISmartImageStretchView(position, size, selectedHoveringImageSource);
 			else
 				this.selectedHoveringView = this.selectedView;
+			
+			super(position, size, initialText, callback, callbackArgument);
 		}
 		
-		override public function update():void
+		/**
+		 * Protected
+		 */
+		protected var _currentView:UISmartImageStretchView = null;
+		
+		override protected function switchToState(state:uint):void
 		{
-			super.update();
+			super.switchToState(state);
 			
-			// button update logic here
+			var newView:UISmartImageStretchView = _currentView;
+			
+			switch (state)
+			{
+				default:
+				case ENABLED_STATE:
+					newView = this.enabledView;
+					break;
+				case DISABLED_STATE:
+					newView = this.disabledView;
+					break;
+				case HOVERING_STATE:
+					newView = this.hoveringView;
+					break;
+				case PRESSED_STATE:
+					newView = this.pressedView;
+					break;
+				case SELECTED_STATE:
+					newView = this.selectedView;
+					break;
+				case SELECTED_HOVERING_STATE:
+					newView = this.selectedHoveringView;
+					break;
+			}
+			
+			if (newView != _currentView)
+			{
+				this.removeSubview(_currentView);
+				this.addSubview(newView);
+				this.sendSubviewToBack(newView);
+				_currentView = newView;
+			}
 		}
 	}
 }

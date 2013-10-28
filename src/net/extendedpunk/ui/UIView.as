@@ -2,11 +2,11 @@ package net.extendedpunk.ui
 {
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import net.flashpunk.graphics.Canvas;
-	import net.flashpunk.FP;
+	import net.extendedpunk.ext.EXTColor;
 	import net.extendedpunk.ext.EXTOffsetType;
 	import net.extendedpunk.ext.EXTUtility;
-	import net.extendedpunk.ext.EXTColor
+	import net.flashpunk.FP;
+	import net.flashpunk.graphics.Canvas;
 	
 	/**
 	 * UIView
@@ -59,14 +59,18 @@ package net.extendedpunk.ui
 		 */
 		public function addSubview(subview:UIView):void
 		{
-			if (_subviews == null)
-				_subviews = new Vector.<UIView>();
-			
-			_subviews.push(subview);
+			if (subview != null)
+			{
+				if (_subviews == null)
+					_subviews = new Vector.<UIView>();
+				
+				_subviews.push(subview);
+			}
 		}
 		
 		/**
 		 * Remove a View from this View's list of subviews.
+		 * NOTE - Only removes the first occurrence, if there are multiple.
 		 * @param	subview	The View to remove from this View's subviews.
 		 * @return	The View which was removed, or null if it wasn't found.
 		 */
@@ -74,7 +78,7 @@ package net.extendedpunk.ui
 		{
 			var removedView:UIView = null;
 			
-			if (_subviews != null)
+			if (subview != null && _subviews != null)
 			{
 				var removed:Vector.<UIView>  = _subviews.splice(_subviews.indexOf(subview), 1);
 				if (removed != null && removed.length > 0)
@@ -82,6 +86,33 @@ package net.extendedpunk.ui
 			}
 			
 			return removedView;
+		}
+		
+		/**
+		 * If the specified subview exists in our list of subviews,
+		 * mark it to be rendered last, which visualizes it in front.
+		 */
+		public function bringSubviewToFront(subview:UIView):void
+		{
+			if (subview != null && _subviews != null)
+			{
+				var foundView:UIView = this.removeSubview(subview);
+				if (foundView != null)
+					_subviews.push(subview);
+			}	
+		}
+		
+		/**
+		 * 
+		 */
+		public function sendSubviewToBack(subview:UIView):void
+		{
+			if (subview != null && _subviews != null)
+			{
+				var foundView:UIView = this.removeSubview(subview);
+				if (foundView != null)
+					_subviews.unshift(subview);
+			}
 		}
 		
 		/**
