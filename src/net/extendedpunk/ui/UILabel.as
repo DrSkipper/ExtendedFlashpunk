@@ -16,15 +16,7 @@ package net.extendedpunk.ui
 		/**
 		 * The text to display in this view
 		 */
-		public function get text():Text
-		{
-			return _text;
-		}
-		public function set text(text:Text):void
-		{
-			_text = text;
-			this.updateText();
-		}
+		public var text:Text;
 		
 		/**
 		 * Set this to render image to a non-default buffer
@@ -46,22 +38,18 @@ package net.extendedpunk.ui
 			text = initialText;
 		}
 		
-		/**
-		 * Update the view's size according to the size of the text
-		 */
-		public function updateText():void
+		override public function update():void
 		{
-			this.size = _text != null ? 
-						new Point(_text.scaledWidth, _text.scaledHeight) :
-						new Point();
+			// Update the view's size according to the size of the text
+			this.size.x = this.text.scaledWidth;
+			this.size.y = this.text.scaledHeight;
+			
+			super.update();
 		}
 		
 		/**
 		 * Protected
-		 */
-		protected var _text:Text;
-		
-		/**
+		 *
 		 * Override UIView's renderContent() to render text at this location
 		 * @param	absoluteUpperLeft	Screen coordinate to place content at.
 		 * @param	absoluteSize		Bounds to render content within.
@@ -71,13 +59,13 @@ package net.extendedpunk.ui
 		{
 			super.renderContent(absoluteUpperLeft, absoluteSize, scale);
 			
-			if (_text != null)
+			if (this.text != null)
 			{
-				var oldScale:Number = _text.scale;
-				_text.scale *= scale;
-				_text.render(customBuffer != null ? customBuffer : FP.buffer, 
+				var oldScale:Number = this.text.scale;
+				this.text.scale *= scale;
+				this.text.render(customBuffer != null ? customBuffer : FP.buffer, 
 								absoluteUpperLeft, EXTUtility.ZERO_POINT);
-				_text.scale = oldScale;
+				this.text.scale = oldScale;
 			}
 		}
 	}
