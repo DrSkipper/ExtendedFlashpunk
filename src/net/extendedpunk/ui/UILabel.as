@@ -41,8 +41,11 @@ package net.extendedpunk.ui
 		override public function update():void
 		{
 			// Update the view's size according to the size of the text
-			this.size.x = this.text.scaledWidth;
-			this.size.y = this.text.scaledHeight;
+			if (this.text != null)
+			{
+				this.size.x = this.text.scaledWidth;
+				this.size.y = this.text.scaledHeight;
+			}
 			
 			super.update();
 		}
