@@ -1,14 +1,14 @@
 package net.extendedpunk.ui
 {
+	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	
-	import net.extendedpunk.ext.EXTColor;
-	import net.extendedpunk.ext.EXTOffsetType;
-	import net.extendedpunk.ext.EXTUtility;
 	import net.flashpunk.FP;
 	import net.flashpunk.graphics.Canvas;
 	import net.flashpunk.utils.Input;
+	import net.extendedpunk.ext.EXTColor;
+	import net.extendedpunk.ext.EXTOffsetType;
+	import net.extendedpunk.ext.EXTUtility;
 	
 	/**
 	 * UIView
@@ -153,7 +153,8 @@ package net.extendedpunk.ui
 		 * @param	parentSize				The true drawing size of the parent.
 		 * @param	scale					How much to scale the view by - Used to account for zoom in camera-relative UI.
 		 */
-		public function render(parentAbsolutePosition:Point, parentSize:Point, scale:Number):void
+		public function render(buffer:BitmapData, parentAbsolutePosition:Point, 
+							   parentSize:Point, scale:Number):void
 		{
 			var myOffset:Point = new Point(this.position.x, this.position.y);
 			var mySize:Point = new Point(this.size.x, this.size.y);
@@ -170,11 +171,11 @@ package net.extendedpunk.ui
 			var myAbsoluteUpperLeft:Point = EXTUtility.AbsolutePositionOfPointInContainer(parentAbsolutePosition, parentSize, myRelativeUpperLeft, this.offsetAlignmentInParent);
 			
 			// Logic to render content of this view occurs now
-			this.renderContent(myAbsoluteUpperLeft, mySize, scale);
+			this.renderContent(buffer, myAbsoluteUpperLeft, mySize, scale);
 			
 			// Now we draw our subviews
 			for each (var view:UIView in _subviews)
-				view.render(myAbsoluteUpperLeft, mySize, scale);
+				view.render(buffer, myAbsoluteUpperLeft, mySize, scale);
 		}
 		
 		/**
@@ -204,7 +205,8 @@ package net.extendedpunk.ui
 		 * @param	absoluteSize		Bounds to render content within.
 		 * @param	scale				Zoom level, for scaling images to match.
 		 */
-		protected function renderContent(absoluteUpperLeft:Point, absoluteSize:Point, scale:Number):void
+		protected function renderContent(buffer:BitmapData, absoluteUpperLeft:Point, 
+										 absoluteSize:Point, scale:Number):void
 		{
 			if (_backgroundColor != null)
 			{
@@ -217,7 +219,7 @@ package net.extendedpunk.ui
 				_backgroundColorRectangle.width = absoluteSize.x;
 				_backgroundColorRectangle.height = absoluteSize.y;;
 				_backgroundColorCanvas.fill(_backgroundColorRectangle, _backgroundColor.webColor, _backgroundColor.alpha);
-				_backgroundColorCanvas.render(FP.buffer, absoluteUpperLeft, EXTUtility.ZERO_POINT);
+				_backgroundColorCanvas.render(buffer, absoluteUpperLeft, EXTUtility.ZERO_POINT);
 			}
 			
 			//TODO - fcole - This possibly shouldn't be done during the render phase, should the UI

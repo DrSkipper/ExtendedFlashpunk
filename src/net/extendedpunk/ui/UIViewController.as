@@ -1,9 +1,11 @@
 package net.extendedpunk.ui 
 {
+	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import net.extendedpunk.ext.EXTCamera;
 	import net.extendedpunk.ext.EXTUtility;
 	import net.extendedpunk.ui.UIView;
+	import net.flashpunk.FP;
 	
 	/**
 	 * UIViewController
@@ -18,6 +20,13 @@ package net.extendedpunk.ui
 		 * UI for this tree should be added as subviews to this view.
 		 */
 		public var rootView:UIView;
+		
+		/**
+		 * Set this to render the views in this tree to a custom buffer
+		 * By default we use FP.buffer
+		 */
+		//TODO - fcole - Test that this works
+		public var customBuffer:BitmapData = null;
 		
 		/**
 		 * Constructor. Usually UI positioning is independent of camera location,
@@ -59,7 +68,8 @@ package net.extendedpunk.ui
 				bounds.y *= scale;
 			}
 			
-			rootView.render(offsetPosition, bounds, scale);
+			var bufferToUse:BitmapData = this.customBuffer != null ? this.customBuffer : FP.buffer;
+			rootView.render(bufferToUse, offsetPosition, bounds, scale);
 		}
 		
 		/**

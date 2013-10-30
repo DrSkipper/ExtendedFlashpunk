@@ -28,12 +28,6 @@ package net.extendedpunk.ui
 		}
 		
 		/**
-		 * Set this to render image to a non-default buffer
-		 */
-		//TODO - fcole - Test this, also probably move to view controller level
-		public var customBuffer:BitmapData = null;
-		
-		/**
 		 * Constructor
 		 * @param	position	The initial position of the View, relative to its parent
 		 * @param	image		The image to render in this view and determine its size
@@ -68,16 +62,16 @@ package net.extendedpunk.ui
 		 * @param	absoluteSize		Bounds to render content within.
 		 * @param	scale				Zoom level, for scaling images to match.
 		 */
-		override protected function renderContent(absoluteUpperLeft:Point, absoluteSize:Point, scale:Number):void
+		override protected function renderContent(buffer:BitmapData, absoluteUpperLeft:Point, 
+												  absoluteSize:Point, scale:Number):void
 		{
-			super.renderContent(absoluteUpperLeft, absoluteSize, scale);
+			super.renderContent(buffer, absoluteUpperLeft, absoluteSize, scale);
 			
 			if (_image != null)
 			{
 				var oldScale:Number = _image.scale;
 				_image.scale *= scale;
-				_image.render(customBuffer != null ? customBuffer : FP.buffer, 
-								absoluteUpperLeft, EXTUtility.ZERO_POINT);
+				_image.render(buffer, absoluteUpperLeft, EXTUtility.ZERO_POINT);
 				_image.scale = oldScale;
 			}
 		}
