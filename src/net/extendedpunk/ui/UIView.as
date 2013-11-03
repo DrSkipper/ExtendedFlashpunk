@@ -124,7 +124,8 @@ package net.extendedpunk.ui
 		}
 		
 		/**
-		 * 
+		 * If the specified subview exists in our list of subviews,
+		 * mark it to be rendered first, which visualizes it in back.
 		 */
 		public function sendSubviewToBack(subview:UIView):void
 		{
