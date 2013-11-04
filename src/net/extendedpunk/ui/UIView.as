@@ -59,7 +59,7 @@ package net.extendedpunk.ui
 						return true;
 				}
 			}
-			return false
+			return false;
 		}
 		
 		/**
