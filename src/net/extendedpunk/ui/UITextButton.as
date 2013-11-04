@@ -75,6 +75,11 @@ package net.extendedpunk.ui
 				{
 					if (Input.mousePressed)
 					{
+						_pressed = true;
+						this.switchToState(PRESSED_STATE);
+					}
+					else if (Input.mouseReleased && _pressed)
+					{
 						needsToSendCallback = true;
 						
 						if (this.selectable)
@@ -86,12 +91,10 @@ package net.extendedpunk.ui
 						}
 					}
 					
-					if (Input.mouseDown)
+					if (!Input.mouseDown)
 					{
-						this.switchToState(PRESSED_STATE);
-					}
-					else
-					{
+						_pressed = false;
+						
 						if (!this.selected || !this.selectable)
 							this.switchToState(HOVERING_STATE);
 						else
@@ -100,6 +103,8 @@ package net.extendedpunk.ui
 				}
 				else
 				{
+					_pressed = false;
+					
 					if (this.selected)
 						this.switchToState(SELECTED_STATE);
 					else
@@ -127,6 +132,7 @@ package net.extendedpunk.ui
 		
 		protected var _enabled:Boolean = true;
 		protected var _selected:Boolean = false;
+		protected var _pressed:Boolean = false;
 		
 		protected var _callback:Function;
 		protected var _argument:*;
