@@ -1,7 +1,6 @@
 package net.extendedpunk.ext
 {
 	import flash.geom.Point;
-	import net.flashpunk.World;
 
 	// Hover Camera
 	//   Camera with added functionality to allow a hovering

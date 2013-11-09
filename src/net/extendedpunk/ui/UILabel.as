@@ -3,7 +3,6 @@ package net.extendedpunk.ui
 	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import net.flashpunk.graphics.Text;
-	import net.flashpunk.FP;
 	import net.extendedpunk.ext.EXTUtility;
 	
 	/**

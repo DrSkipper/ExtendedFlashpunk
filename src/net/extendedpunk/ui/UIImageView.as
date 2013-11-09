@@ -3,9 +3,7 @@ package net.extendedpunk.ui
 	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import net.flashpunk.graphics.Image;
-	import net.flashpunk.FP;
 	import net.extendedpunk.ext.EXTUtility;
-	import net.extendedpunk.ext.EXTConsole;
 	
 	/**
 	 * UIImageView
