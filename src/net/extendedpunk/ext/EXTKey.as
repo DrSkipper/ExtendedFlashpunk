@@ -2,10 +2,11 @@ package net.extendedpunk.ext
 {
 	import net.flashpunk.utils.Key;
 	
-	// ExtendedKey
-	// Extends the functionality of Flashpunk's Key class to cover
-	//   more of the keyboard.
-	// Created by Fletcher, 4/23/13
+	/**
+	 * ExtendedKey 
+	 * Extends the functionality of Flashpunk's Key class to cover more of the keyboard.
+	 * Created by Fletcher, 4/23/13
+	 */
 	public class EXTKey extends Key
 	{
 		public static const TILDE:int = 192;

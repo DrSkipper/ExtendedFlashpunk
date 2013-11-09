@@ -1,16 +1,12 @@
 package net.extendedpunk.ext 
 {
 	/**
-	 * ...
-	 * @author Jams
+	 * EXTMath
+	 * Static object for math-related helper functions
+	 * Created by Jams, 10/20/13
 	 */
-	public class EXTMath 
+	public class EXTMath extends Object
 	{
-		public function EXTMath() 
-		{
-			
-		}
-		
 		public static function sgn(obj:*):int
 		{
 			if (obj is int || obj is uint || obj is Number)

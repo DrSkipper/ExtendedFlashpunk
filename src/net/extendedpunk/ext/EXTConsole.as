@@ -12,7 +12,7 @@ CONFIG::debug
 	 *   and displaying of debug console
 	 * Created by Fletcher, 4/23/13
 	 */
-	public class EXTConsole
+	public class EXTConsole extends Object
 	{
 CONFIG::debug
 {

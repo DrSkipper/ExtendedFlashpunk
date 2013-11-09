@@ -4,18 +4,24 @@ package net.extendedpunk.ext
 	import flash.net.SharedObject;
 	import flash.net.SharedObjectFlushStatus;
 	
-	// DataStorage
-	// This class will create/fetch local data for the application, and get/save key-value 
-	//   pairs locally. The keys are Strings while the values can be any Object. 
-	//   Multiple DataStorage objects can be created for different data groups.
-	// Created by Fletcher, 5/4/13
-	public class EXTDataStorage
+	/**
+	 * DataStorage
+	 * This class will create/fetch local data for the application, and get/save key-value 
+	 *   pairs locally. The keys are Strings while the values can be any Object. 
+	 *   Multiple DataStorage objects can be created for different data groups.
+	 * Created by Fletcher, 5/4/13
+	 */
+	public class EXTDataStorage extends Object
 	{
 		private var _sharedObject:SharedObject;
 		private var _currentDataKeys:Vector.<String> = null;
 		
-		// Construct a DataStorage object for this application.
-		// "dataGroupName" may be set to differentiate different storage groups.
+		/**
+		 * Constructor. Usually only need one per application, although specific data groups
+		 * can be specified with the second parameter.
+		 * @param	applicationName		Name of the application
+		 * @param	dataGroupName		Can be set to differentiate different storage groups
+		 */
 		public function EXTDataStorage(applicationName:String, dataGroupName:String = "ApplicationData")
 		{
 			var localDataName:String = applicationName + "-" + dataGroupName;
@@ -23,15 +29,20 @@ package net.extendedpunk.ext
 			_currentDataKeys = new Vector.<String>();
 		}
 		
-		// Get the current saved value for the given key. Will return undefined 
-		//   if the key has not yet been used to save a value.
+		/**
+		 * Get the current saved value for the given key.
+		 * @param	key		Key to lookup a value for locally
+		 * @return			Value stored at 'key' location, or "undefined" if 'key' hasn't been used to store anything
+		 */
 		public function getValueForKey(key:String):Object
 		{
 			return _sharedObject.data[key];
 		}
-		
-		// Save the given value for the given key. If the key already exists,
-		//   it's value will be overwritten.
+		 
+		/**
+		 * Save the given value for the given key. If the key already exists,
+		 *   it's value will be overwritten.
+		 */
 		public function saveValueWithKey(key:String, value:Object):void 
 		{
 			if (isNaN(_sharedObject.data[key]))
@@ -42,8 +53,10 @@ package net.extendedpunk.ext
 			this.flushSharedObject();
 		}
 		
+		/**
+		 * Clears all saved values
+		 */
 		//TODO - fcole - Test this function
-		// Clears all saved values
 		public function clearAll():void 
 		{
 			EXTConsole.debug("DataStorage", "clearAll()", "Clearing saved values... Reload SWF and the values should be \"undefined\".");
@@ -54,8 +67,10 @@ package net.extendedpunk.ext
 			this.flushSharedObject(); // Needed?
 		}
 		
+		/**
+		 * Clear the saved value for the given key
+		 */
 		//TODO - fcole - Test this function
-		// Clear the saved value for the given key
 		public function removeDataForKey(key:String):void
 		{
 			var value:Object = _sharedObject.data[key];
@@ -81,7 +96,11 @@ package net.extendedpunk.ext
 			}
 		}
 		
-		// Private helper for writing shared object contents
+		/**
+		 * Private
+		 * 
+		 * Helper for writing shared object contents
+		 */
 		private function flushSharedObject():void
 		{
 			var flushStatus:String = null;
@@ -114,8 +133,9 @@ package net.extendedpunk.ext
 			}
 		}
 		
-		// Private helper callback used if the user must give permission 
-		//   writing local data.
+		/** 
+		 * Helper callback used if the user must give permission writing local data.
+		 */
 		private function onFlushStatus(event:NetStatusEvent):void 
 		{
 //			output.appendText("User closed permission dialog...\n");

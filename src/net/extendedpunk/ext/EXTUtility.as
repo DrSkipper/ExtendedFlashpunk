@@ -3,15 +3,21 @@ package net.extendedpunk.ext
 	import flash.geom.Point;
 	import flash.utils.describeType;
 	
-	// Utility Class with various convenience functions, mostly relating to offsets.
-	// Created by Fletcher, 8/25/13
-	public class EXTUtility
+	/**
+	 * EXTUtility
+	 * Utility Class with various convenience functions used throughout ExtendedPunk,
+	 *    mostly relating to offsets.
+	 * Created by Fletcher, 8/25/13
+	 */
+	public class EXTUtility extends Object
 	{
 		static public const ZERO_POINT:Point = new Point(0, 0);
 		
-		// Helper function for assisting automation of fake AS3 Enums
-		// Credit: http://scottbilas.com/blog/faking-enums-in-as3/
-		public static function InitEnumConstants(inType :*) :void
+		/**
+		 * Helper function for assisting automation of fake AS3 Enums
+		 * Credit: http://scottbilas.com/blog/faking-enums-in-as3/
+		 */
+		public static function InitEnumConstants(inType :*):void
 		{
 			var type :XML = describeType(inType);
 			for each (var constant :XML in type.constant)
@@ -20,10 +26,17 @@ package net.extendedpunk.ext
 			}
 		}
 		
-		// Find the distance between two rectangular containers on the screen.
-		// p1 and p2 - Points in the first and second containers, respectively
-		// containerSize1 & 2 - The sizes of the two containers
-		// offsetType1 & 2 - Where the given points are located in the containers
+		/**
+		 * Find the distance between two rectangular containers on the screen.
+		 * Note that the offsetType parameters default to TOP_LEFT.
+		 * @param	p1				A point within the first container
+		 * @param	p2				A point within the second container
+		 * @param	containerSize1	The size of the first container
+		 * @param	containerSize2	The size of the second container
+		 * @param	offsetType1		The offset that 'p1' uses to measure its location within 'containerSize1'
+		 * @param	offsetType2 	The offset that 'p2' uses to measure its location within 'containerSize2'
+		 * @return	A point containing the x and y distance between the two containers
+		 */
 		public static function DistanceBetweenTwoContainers(p1:Point, 
 															p2:Point, 
 															containerSize1:Point, 
@@ -42,8 +55,13 @@ package net.extendedpunk.ext
 			return new Point(p2Normalized.x - p1Normalized.x, p2Normalized.y - p1Normalized.y);
 		}
 		
-		// Helper function mostly meant to be used internally here,
-		//  DistanceBetweenTwoContainers() should be the more commonly needed method.
+		/**
+		 * Given a point in a container, find the upper-left position of that container
+		 * @param	p				A point within the container
+		 * @param	containerSize	The size of the container
+		 * @param	offsetType		Where 'p' measures its offset from
+		 * @return	The upper-left position of the given container
+		 */
 		public static function UpperLeftifyCoordinate(p:Point, containerSize:Point, offsetType:EXTOffsetType):Point
 		{
 			var pNormalized:Point = new Point(p.x, p.y);
@@ -93,9 +111,16 @@ package net.extendedpunk.ext
 			return pNormalized;
 		}
 		
-		// Given the absolute point (i.e. on the screen) of a container, and a point with 
-		//   relative coordinates within that container, find the absolute position of the
-		//   point within the container.
+		/**
+		 * Given the absolute point (i.e. on the screen) of a container, and a point with 
+		 *   relative coordinates within that container, find the absolute position of the
+		 *   point within the container.
+		 * @param	absoluteUpperLeftPositionOfContainer	The upper-left coordinate for the container
+		 * @param	containerSize			The size of the container
+		 * @param	pointOffsetInContainer	A point within the container
+		 * @param	offsetType				The type of offset that 'pointOffsetInContainer' uses to measure its position
+		 * @return	The absolute position of 'pointOffsetInContainer'
+		 */
 		public static function AbsolutePositionOfPointInContainer(absoluteUpperLeftPositionOfContainer:Point, 
 																  containerSize:Point, 
 																  pointOffsetInContainer:Point, 

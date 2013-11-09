@@ -2,10 +2,12 @@ package net.extendedpunk.ext
 {
 	import net.extendedpunk.ext.EXTUtility;
 	
-	// An "Enumeration" which specifies where offsets 
-	//   should be measured from.
-	// Created by Fletcher, 8/25/13
-	public class EXTOffsetType
+	/**
+	 * EXTOffsetType
+	 * An "Enumeration" which specifies where offsets should be measured from.
+	 * Created by Fletcher, 8/25/13
+	 */
+	public class EXTOffsetType extends Object
 	{
 		public static const CENTER 			:EXTOffsetType = new EXTOffsetType();
 		public static const TOP_LEFT 		:EXTOffsetType = new EXTOffsetType();
