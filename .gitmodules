@@ -1,3 +1,6 @@
 [submodule "FlashPunk"]
 	path = FlashPunk
 	url = https://github.com/Draknek/FlashPunk.git
+[submodule ".\\as3-controller-input"]
+	path = .\\as3-controller-input
+	url = https://github.com/jpfarmer/as3-controller-input.git
