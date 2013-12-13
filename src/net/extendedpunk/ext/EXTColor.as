@@ -15,10 +15,10 @@ package net.extendedpunk.ext
 		public var alpha:Number;
 		
 		// Specific RGB values, 0 to 1
-		public function get red():Number { return (webColor & 0xFF0000) / 255; }
+		public function get red():Number { return ((webColor & 0xFF0000) >> 16) / 255; }
 		public function set red(value:Number):void { this.setColor(value, this.green, this.blue, this.alpha); }
 		
-		public function get green():Number { return (webColor & 0x00FF00) / 255; }
+		public function get green():Number { return ((webColor & 0x00FF00) >> 8) / 255; }
 		public function set green(value:Number):void { this.setColor(this.red, value, this.blue, this.alpha); }
 		
 		public function get blue():Number { return (webColor & 0x0000FF) / 255; }
